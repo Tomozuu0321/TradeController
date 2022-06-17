@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>コンパネ</title>
+    <link rel="stylesheet" href="{{ static_url("style.css") }}"/>
+    <meta http-equiv="refresh" content="20; URL=http://{{hostname}}:8888/">
+  </head>
+  <body>
+    <p>{{pMessage}}</p>
+    <div id="container">
+      <div id="main">
+        <form method="post" action="/">
+          <textarea name="body" cols="40" rows="4" style="width: 162px; height: 35px;"></textarea>
+          <!--textarea name="body" cols="40" rows="4"></textarea> -->
+          <input type="submit">
+        </form>
+      </div>
+    </div>
