@@ -113,6 +113,9 @@ class CEstimate( pd.DataFrame ):
         _Dev30=table[_c.item6][3.0] #標準値
         #_Dev35=t.Dev35
         _diffC3530=(table[_c.Target][3.5]-table[_c.Target][3.0]).round(1)
+        
+        _diffC3230=(table[_c.Target][3.2]-table[_c.Target][3.0]).round(3)
+        _diffF353230=t.diffC3533-_diffC3230
 
         _Buy =_c.dBuy(_Dev30)
         _Sell=_c.dSell(_Dev30)
@@ -126,40 +129,52 @@ class CEstimate( pd.DataFrame ):
         _diff3530=_std35-_std30
 
         _info=f"3.0={round(_Dev30,wc.Dig)} 3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
-        _info2=f"{'拡散方向' if _std35 > _std33 else '収縮方向' } df50={round(_diff3530,wc.Dig)} df52={round(_diff3532,wc.Dig)} df53={round(_diff3533,wc.Dig)} sd32={round(_std32,wc.Dig)} sd33={round(_std33,wc.Dig)}  sd35={round(_std35,wc.Dig) }"
-
+        #_info2=f"{'拡散方向' if _std35 > _std33 else '収縮方向' } df50={round(_diff3530,wc.Dig)} df52={round(_diff3532,wc.Dig)} df53={round(_diff3533,wc.Dig)} sd32={round(_std32,wc.Dig)} sd33={round(_std33,wc.Dig)}  sd35={round(_std35,wc.Dig) }"
+        _info2=f"{'拡散方向' if _std35 > _std33 else '収縮方向' } TR={round(_diffF353230,wc.Dig)} 3230C={round(_diffC3230,wc.Dig)} 3533C={round(t.diffC3533,wc.Dig)} "
+        
+        # df50={round(_diff3530,wc.Dig)} df52={round(_diff3532,wc.Dig)} df53={round(_diff3533,wc.Dig)} sd32={round(_std32,wc.Dig)} sd33={round(_std33,wc.Dig)}  sd35={round(_std35,wc.Dig) }"
         #std33={round(table[_c.item0][3.3],wc.Dig)} std32={round(table[_c.item0][3.3],wc.Dig)} "
         #3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
 
         #if( _Dev30 >= 0.0 ):          # 偏差値ｶﾞ0より上は買い =>やめ
-        if( t.diffM3533 > 0.0 ):       # 平均が上昇している場合は買い　負けが込む場合平均とるかも　t.diffM3533 mean 0.60 
+        #if( t.diffM3533 > 0.09 ):     # 平均が上昇している場合は買い　負けが込む場合平均とるかも　t.diffM3533 mean 0.60 
+        if( _diffF353230 > 0.6 ):      # 上昇中 db 0.45 20220619
             if( _Buy >= t.Dev35 ):     # 偏差値ｶﾞ75%範囲なら買い
                 _Esti=CEsti.Buy
-                _text=f"順張りの買い {_info}"
+                _text=f"H順張りの買い {_info}"
                 #_text=f"順張りの買い 3.0={_Dev30} 3.5 {t.Dev35} std={_std30} 3335={t.diffC3533}"
             else:
                 # 0.1 pip 満たないで負ける件数は 0.0004%の為見送りはしない
                 #連敗中の逆張りは見送る =>やめ
                 #if( Params.TradeSummary.ExeCont > -2 ):
                 _Esti=CEsti.RSell
-                _text=f"逆張りの売り {_info}"
+                _text=f"H逆張りの売り {_info}"
                 #else:
                 #_Esti=CEsti.PASS
                 #_text=f"連敗中売り見送り {_info}"
-        else:  #t.diffM3533 > 0.0       # 平均が上昇している場合は買い　負けが込む場合平均とるかも　t.diffM3533 mean -0.66
+        #elif( t.diffM3533 < -0.15 ):    #t.diffM3533 > 0.0       # 平均が上昇している場合は買い　負けが込む場合平均とるかも　t.diffM3533 mean -0.66
+        elif( _diffF353230 < -0.6 ):     # 下降中
             if( _Sell <= t.Dev35 ):     #偏差値ｶﾞ75%範囲なら売リ
                 _Esti=CEsti.Sell
-                _text=f"順張りの売り {_info}"
+                _text=f"L順張りの売り {_info}"
                 #_text=f"順張りの売り 3.0={_Dev30} 3.5 {t.Dev35} std={_std30} 3335={t.diffC3533}"
             else:
                 # 0.1 pip 満たないで負ける件数は 0.0004%の為見送りはしない
                 #連敗中の逆張りは見送る
                 #if( Params.TradeSummary.ExeCont > -2 ):
                 _Esti=CEsti.RBuy
-                _text=f"逆張りの買い {_info}"
+                _text=f"L逆張りの買い {_info}"
                 #else:
                 #_Esti=CEsti.PASS
                 #_text=f"連敗中買い見\送り {_info}"
+
+        else:  #レンジ
+            if( t.diffM3533 > 0.0 ):
+                _Esti=CEsti.Sell
+                _text=f"R逆張りの売り {_info}"
+            else:
+                _Esti=CEsti.RBuy
+                _text=f"R逆張りの買い {_info}"
 
         #t.Amount=Params.Amount()
         t.Esti=_Esti
