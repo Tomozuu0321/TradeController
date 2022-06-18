@@ -86,12 +86,26 @@ class CTrade():
 
     def __lossUpdate(self,df,Params ):
     #def __lossCut(self,df,Params ):
+        if( df.diff == const.InvalidValue ):
+            return
 
+        _diff=df.diff
         _AllLoss=Params.Loss()
-        _AllLoss+=df.diff
+        _AllLoss+=_diff
+        _diff=0
         if( _AllLoss > 0.0 ):
+            _diff=_AllLoss
             _AllLoss=0.0
+
         Params.Loss(_AllLoss)
+
+        if( _diff > 0.0 ):
+            _BfLoss=Params.BfLoss()
+            _BfLoss+=_diff
+            if( _BfLoss > 0.0 ):
+                _BfLoss=0.0
+            Params.BfLoss(_BfLoss)
+
         #self.lost+=df.diff
 
         #現在は資産が10%目減りしたらアラートを鳴らすだけ
