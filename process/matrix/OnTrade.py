@@ -52,8 +52,18 @@ def OnTrade3(Params,sts,evt):
 @MatrixFunctionEx
 def OnTrade4(Params,sts,evt):
 
-    #CSoundHandler().PlaySound( const.NoticeModeSound )
+    if( evt != CEvt.TRADE_TH ):
+        #print("err")
+        print(f"OnTrade4 スレッド終了します s:{sts} t:{type(sts)}" )
+        return
 
+    #トランザクションの退避
+    if( type(Params.Receive) is dict ):
+        _data=Params.Receive.copy()
+    else:
+        _data=Params.Receive
+
+    #CSoundHandler().PlaySound( const.NoticeModeSound )
     _max=10
     for i in range(0,_max):
         if( Params.trade.Impossible ):
@@ -68,16 +78,8 @@ def OnTrade4(Params,sts,evt):
 
     print(f"購入の手続きを開始します {datetime.now()} s:{sts} t:{type(sts)}" )
 
-    #トランザクションの退避
-    if( type(Params.Receive) is dict ):
-        _data=Params.Receive.copy()
-    else:
-        _data=Params.Receive
-
-    if( evt != CEvt.TRADE_TH ):
-        #print("err")
-        print(f"OnTrade4 スレッド終了します s:{sts} t:{type(sts)}" )
-        return
+    #トランザクションの復旧
+    Params.Receive=_data
 
     #購入判定
     #from data.TradeInfo import CTrade
@@ -90,9 +92,9 @@ def OnTrade4(Params,sts,evt):
 
     #購入処理
     if(Bit.Chk(Params.Flags,CFlags.REJECT)):
-        __OnReject(Params,Params.driver,Params.trade)
+        print(f"call  __OnReject {Bit.Chk(Params.Flags,CFlags.REJECT):x} ")
+        __OnTrade(Params,Params.driver,Params.trade)
+        #__OnReject(Params,Params.driver,Params.trade)
     else:
         __OnTrade(Params,Params.driver,Params.trade)
 
-    #トランザクションの復旧
-    Params.Receive=_data

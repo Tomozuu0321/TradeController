@@ -27,6 +27,9 @@ def OnOpen(Params,sts,evt):
             except:
                 Params.dfs=info.doRead()
 
+        if( Params.Amount() < const.Amount ):
+            Params.Amount(const.Amount)
+
         from general.data.summary.TradeSummary import CTradeSummary
         Params.TradeSummary=CTradeSummary().doDbRead(Params.Mode())
         from general.data.summary.TranSummary import CTranSummary

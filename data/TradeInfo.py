@@ -68,7 +68,8 @@ class CTrade():
             # ロスカット処理
             if( _lost > self.MaxValune ):
                 #ロス額の退避
-                Params.BfLoss(round(Params.Loss() - _baseAmount,0 ))
+                _BfLoss=Params.BfLoss()
+                Params.BfLoss(round(_BfLoss + Params.Loss() - _baseAmount,0 ))
                 _lost=_baseAmount*-1
                 Params.Loss(_lost)
                 """
@@ -105,8 +106,14 @@ class CTrade():
             CSoundHandler().PlaySound( const.NoticeModeSound )
 
     def getAmount( self,df,Martingale,Params ):
+
+        #df.loc[ BrEmv.SummaryIndex0,'ExeCont'] =-3
         _mode=BrEmv.DefAction
+        if( Params.Amount() < const.Amount ):
+            Params.Amount(const.Amount)
+
         _baseAmount=Params.Amount()
+        _Amount=_baseAmount
     
         self.__lossUpdate( df,Params )
         if df.loc[ BrEmv.SummaryIndex0,"ExeCont"] < 0 :
@@ -147,14 +154,18 @@ class CTrade():
         if( self.IsLimitOver ):
             CSoundHandler().PlaySound( const.lossCutSound )
 
-        if( _Amount <~ 500 ):
+        if( _Amount < 500 ):
             _Amount=_baseAmount
             print(f"getAmount bug a{_Amount} b {_Amount }")
 
         self.Amount=_Amount
 
         _text=f"{ '積極運用' if self.poOp==True else '通常運用' } 上限値 { round(self.MaxValune,2)} bF {Params.BfLoss()}"
+
         print(f"+++ {_text} +++++")
+
+        print(f" getAmount { _Amount } loss {Params.Loss()} cnt { df.loc[ BrEmv.SummaryIndex0,'ExeCont'] } M: { self.mode }  -------------")
+
         Params.TradeMsg=_text
 
         return(_Amount,Params.Loss(),_mode)
