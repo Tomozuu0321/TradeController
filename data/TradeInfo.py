@@ -26,7 +26,8 @@ class CTrade():
     #diffstd:float=0
     Dev35:float=0           #偏差値
     poOp:bool=True          # PositiveOperation 積極的運用
-    simulate=bool=False
+    Issimulate=bool=False
+    simulateValue:int=1
 
     def copy(self):
         return(copy.copy(self))
@@ -132,6 +133,9 @@ class CTrade():
     
         self.__lossUpdate( df,Params )
         if df.loc[ BrEmv.SummaryIndex0,"ExeCont"] < 0 :
+            simulateValue:int=1
+            _mar = divmod(Martingale,100)
+            self.simulateValue=_mar[1]
             _mar= df.isMarPossible(Martingale)
             if(_mar==0):
                 _mode=BrEmv.WaitAction
@@ -142,7 +146,14 @@ class CTrade():
                 #_Amount=((_baseAmount*_cnt)*1.13) + _baseAmount
             else:
                 _Amount=self.__BasicAmount(_baseAmount,_cnt+1)
+
+            #シュミレーｔモード判定
+            if( _cnt >= self.simulateValue ):
+                self.Issimulate=True
+            else:
+                self.Issimulate=False
         else:
+            self.Issimulate=False
             #２連勝したら前回のロス額を戻す
             _cnt= df.loc[ BrEmv.SummaryIndex0,"ExeCont"]
             if _cnt > 1 :
@@ -175,11 +186,11 @@ class CTrade():
 
         self.Amount=_Amount
 
-        _text=f"{ '積極運用' if self.poOp==True else '通常運用' } 上限値 { round(self.MaxValune,2)} bF {Params.BfLoss()}"
+        _text=f"{ '積極運用' if self.poOp==True else '通常運用' } { '検証中' if self.Issimulate==True else '実行中' } 上限値 { round(self.MaxValune,2)} bF {Params.BfLoss()}"
 
         print(f"+++ {_text} +++++")
 
-        print(f" getAmount { _Amount } loss {Params.Loss()} cnt { df.loc[ BrEmv.SummaryIndex0,'ExeCont'] } M: { self.mode }  -------------")
+        print(f" getAmount { _Amount } loss {Params.Loss()} cnt { df.loc[ BrEmv.SummaryIndex0,'ExeCont'] } S:{ self.Issimulate } M: { self.mode }  -------------")
 
         Params.TradeMsg=_text
 

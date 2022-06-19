@@ -27,6 +27,12 @@ def __OnReject(Params,driver,Tra ):
 #@MatrixSupportFunction
 def __OnTrade(Params,driver,Tra ):
 
+    if( Tra.Issimulate ):
+        _text=f"::__OnTrade-002 シュミレートモードです {datetime.now()}"
+        Params.Msg=_text
+        log.critical(_text)
+        return
+
     #driver.find_element ele.get_attribute('value')
     #print( "購入を開始します" )
     

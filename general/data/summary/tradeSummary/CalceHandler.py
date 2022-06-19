@@ -98,21 +98,77 @@ def _SetRequestResult(df,Params,Trn):
 
     #print(f'{getShortName(__name__)} Req成功率 {df.loc[ _idx,"ReqScsPar"].round(4)}' )
 
+
+
+
+
+
+
+
+
+
+
+
+
 #@StopWatch
 def _SetTradeResult(df,Params,Trn):
+
+    def AnalysisTransaction( Params ):
+        _val=0
+        try:
+            #from data.Estimate.EstiColumns import PEstimateColumns as _c
+            #_table=Params.trade.table.copy
+            _data=Params.Receive
+            _key=_data['MT'][0]["Evt"]  #c
+            if( _key== 'TRAN' ):
+                #['中間率20秒(%)', '1080.30', '差分', '21.06', '1272.22', '24.77', '[STCH]', '56.49', '38.05', '18.45', '56.49', '38.05', '予測', '1', '結果', '1', '照合', '0', '']
+                 #df2.loc[4.0]=float(_data['MT'][0][_key][0]["00"][0].split(',')[11])
+                 #df2.loc[4.0]=float(_data['MT'][0][_key][0]["00"][0].split(',')[11])
+                _val=float(_data['MT'][0][_key][0]["03"][0].split(',')[3])
+        except Exception:
+            pass
+        finally:
+            return(_val)
 
     #log.error(f" call _SetTradeResult-000 { } {datetime.now()}")
     #print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     #_text=f" call _SetTradeResult-000 W={'勝ち' if _Flag==CEsti.Win else '負け'} d:={ _diff }  A:={ _Assets } {datetime.now()}"
     _Assets=Trn.Assets
 
-    if( df.loc[ BrEmv.SummaryIndex0,"Assets"] < _Assets ):
-        _Flag=CEsti.Win
-    elif ( df.loc[ BrEmv.SummaryIndex0,"Assets"] > _Assets ):
-        _Flag=CEsti.Lose
-    else:
+    if( Trn.Issimulate ):
+        _text=f"::_SetTradeResult-003 シュミレートモードです {datetime.now()}"
+        print(f"{_text}")
+
+        _value=AnalysisTransaction( Params )
         _Flag=CEsti.PASS
-    
+        if( _value >= 1.0 ):
+            if( Trn.Esti==CEsti.Buy or Trn.Esti==CEsti.RBuy ):
+                _Flag=CEsti.Win
+                #_Assets+=Trn.Amount*1.8
+            elif( Trn.Esti==CEsti.Sell or Trn.Esti==CEsti.RSell ):
+                _Flag=CEsti.Lose
+                #_Assets+=Trn.Amount*-1
+        elif( _value <= 1.0 ):
+            if( Trn.Esti==CEsti.Buy or Trn.Esti==CEsti.RBuy ):
+                _Flag=CEsti.Lose
+                #_Assets+=Trn.Amount*1.8
+            elif( Trn.Esti==CEsti.Sell or Trn.Esti==CEsti.RSell ):
+                _Flag=CEsti.Win
+                #_Assets+=Trn.Amount*-1
+        else:
+            _Flag=CEsti.Lose
+
+    else:
+        _text=f"::_SetTradeResult-003 通常モードです {datetime.now()}"
+        print(f"{_text}")
+
+        if( df.loc[ BrEmv.SummaryIndex0,"Assets"] < _Assets ):
+            _Flag=CEsti.Win
+        elif ( df.loc[ BrEmv.SummaryIndex0,"Assets"] > _Assets ):
+            _Flag=CEsti.Lose
+        else:
+            _Flag=CEsti.PASS
+
     Trn.Result=_Flag
     #df.loc[ BrEmv.SummaryIndex0 ,"Assets"]=_Assets
 
