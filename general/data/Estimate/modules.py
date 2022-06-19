@@ -172,10 +172,10 @@ class CEstimate( pd.DataFrame ):
         else:  #レンジ
             if( t.diffM3533 > 0.0 ):
                 _Esti=CEsti.Sell
-                _text=f"RS逆張りの売り {_info}"
+                _text=f"RS 逆張りの売り {_info}"
             else:
                 _Esti=CEsti.RBuy
-                _text=f"RS逆張りの買い {_info}"
+                _text=f"RS 逆張りの買い {_info}"
 
         #t.Amount=Params.Amount()
         t.Esti=_Esti
