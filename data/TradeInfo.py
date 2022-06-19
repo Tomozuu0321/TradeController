@@ -27,7 +27,8 @@ class CTrade():
     Dev35:float=0           #偏差値
     poOp:bool=True          # PositiveOperation 積極的運用
     Issimulate=bool=False
-    simulateValue:int=1
+    #MarMin:int=0
+    #MarMax:int=1
 
     def copy(self):
         return(copy.copy(self))
@@ -134,8 +135,6 @@ class CTrade():
         self.__lossUpdate( df,Params )
         if df.loc[ BrEmv.SummaryIndex0,"ExeCont"] < 0 :
             simulateValue:int=1
-            _mar = divmod(Martingale,100)
-            self.simulateValue=_mar[1]
             _mar= df.isMarPossible(Martingale)
             if(_mar==0):
                 _mode=BrEmv.WaitAction
@@ -148,7 +147,8 @@ class CTrade():
                 _Amount=self.__BasicAmount(_baseAmount,_cnt+1)
 
             #シュミレーｔモード判定
-            if( _cnt >= self.simulateValue ):
+            _mar = divmod(Martingale,100)
+            if( _cnt < _mar[0]  or _mar[1] < _cnt  ):
                 self.Issimulate=True
             else:
                 self.Issimulate=False
