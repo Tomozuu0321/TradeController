@@ -98,18 +98,6 @@ def _SetRequestResult(df,Params,Trn):
 
     #print(f'{getShortName(__name__)} Req成功率 {df.loc[ _idx,"ReqScsPar"].round(4)}' )
 
-
-
-
-
-
-
-
-
-
-
-
-
 #@StopWatch
 def _SetTradeResult(df,Params,Trn):
 
