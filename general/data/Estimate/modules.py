@@ -141,15 +141,15 @@ class CEstimate( pd.DataFrame ):
         if( _diffF353230 > 2.4 ):      # Reqエリア外
             if( _diffF353230 > 4.7 ):
                 _Esti=CEsti.Buy
-                _text=f"HB順張りの買い {_info}"
+                _text=f"HB 順張りの買い {_info}"
             else:
                 if( _Buy >= t.Dev35 ):     # 偏差値ｶﾞ75%範囲なら買い
                     _Esti=CEsti.Buy
-                    _text=f"HS順張りの買い {_info}"
+                    _text=f"HS 順張りの買い {_info}"
                     #_text=f"順張りの買い 3.0={_Dev30} 3.5 {t.Dev35} std={_std30} 3335={t.diffC3533}"
                 else:
                     _Esti=CEsti.RSell
-                    _text=f"HS逆張りの売り {_info}"
+                    _text=f"HS 逆張りの売り {_info}"
                     #else:
                     #_Esti=CEsti.PASS
                     #_text=f"連敗中売り見送り {_info}"
@@ -157,14 +157,14 @@ class CEstimate( pd.DataFrame ):
         elif( _diffF353230 < -2.4 ):     # Reqエリア外
             if( _diffF353230 < -4.77 ):
                 _Esti=CEsti.Sell
-                _text=f"LB順張りの売り {_info}"
+                _text=f"LB 順張りの売り {_info}"
             else:
                 if( _Sell <= t.Dev35 ):     #偏差値ｶﾞ75%範囲なら売リ
                     _Esti=CEsti.Sell
-                    _text=f"LSB順張りの売り {_info}"
+                    _text=f"LS 順張りの売り {_info}"
                 else:
                     _Esti=CEsti.RBuy
-                    _text=f"LS逆張りの買い {_info}"
+                    _text=f"LS 逆張りの買い {_info}"
                     #else:
                     #_Esti=CEsti.PASS
                     #_text=f"連敗中買い見\送り {_info}"
