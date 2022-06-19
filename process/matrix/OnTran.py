@@ -84,11 +84,12 @@ def OnTran2(Params,sts,evt):
         except ProcessContinuedException as _pc:
             #二回以上は何度読んでも無駄なのでリセット
             if(Bit.Chk(Params.Flags,CFlags.B_AMERR)):
-                from data.Exceptions import DriverDownException
-                #from selenium.common.exceptions import  WebDriverException,
-                #_we=WebDriverException( "OnTran2 Rwset Request")
-                _de= DriverDownException("OnTran2 Rwset Request")
-                raise _de
+                from selenium.common.exceptions import  WebDriverException
+                _we=WebDriverException( "OnTran2 Rwset Request")
+                raise _we
+                #from data.Exceptions import DriverDownException
+                #_de= DriverDownException("OnTran2 Rwset Request")
+                #raise _de
             else:
                 Params.Flags=Bit.Set(Params.Flags,CFlags.B_AMERR)
                 raise _pc
