@@ -26,6 +26,7 @@ class CTrade():
     #diffstd:float=0
     Dev35:float=0           #偏差値
     poOp:bool=True          # PositiveOperation 積極的運用
+    simulate=bool=False
 
     def copy(self):
         return(copy.copy(self))
