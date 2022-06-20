@@ -1,6 +1,7 @@
 ﻿import pandas as pd
 #import numpy as np
 #import time
+import matplotlib.
 import matplotlib.pyplot as plt
 
 import os
@@ -59,6 +60,9 @@ def GraphDraw2( owner,table,AannotateList,mode=0 ):
                             color='red',textcoords='offset points',arrowprops=dict(width=1,color='black'))
 
     #グラフ全体の設定」
+
+    matplotlib.use('Agg')  #追記 メモリ２リーク対応
+
     plt.figure(figsize=(9,5))
     _max=len(AannotateList)-2
     plt.subplot(121)
