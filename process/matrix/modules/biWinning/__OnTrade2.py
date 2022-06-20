@@ -105,7 +105,7 @@ def __OnTrade(Params,driver,Tra ):
 
         elif( const.RejectWord in _getText ):
             _msg=MakeMessage(_getText)
-            Params.Flags=Bit.Set(Params.Flags,CFlags.REJECT)
+            #Params.Flags=Bit.Set(Params.Flags,CFlags.REJECT)
             test=f"::_OnTrade-001 取引システムに購入を拒絶されました f:0x{Params.Flags:x} {datetime.now()} { _getText }"
             Params.Msg= _msg
             Params.trade.SummaryFlags=CFlags.REJECT

@@ -93,6 +93,7 @@ def OnTrade4(Params,sts,evt):
     #購入処理
     if(Bit.Chk(Params.Flags,CFlags.REJECT)):
         print(f"call  __OnReject {Bit.Chk(Params.Flags,CFlags.REJECT):x} ")
+        Params.Flags=Bit.Clr(Params.Flags,CFlags.REJECT)
         __OnTrade(Params,Params.driver,Params.trade)
         #__OnReject(Params,Params.driver,Params.trade)
     else:
