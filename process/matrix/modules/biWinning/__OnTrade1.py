@@ -54,7 +54,9 @@ def __PrepareTrading(Params,driver,Amount ):
                     #".sc-ibAmJv:nth-child(1) .asset_icon"
                     #".sc-ibAmJv:nth-child(1) span"
                     #_elements=driver.find_elements(By.CSS_SELECTOR, ".sc-ibAmJv:nth-child(1) .asset_icon")
-                    _elements=driver.find_elements(By.CSS_SELECTOR, ".sc-ibAmJv:nth-child(1) span")
+                    #".sc-iitrsy > span",".sc-eUWgFQ:nth-child(1) > span",f".sc-oHXjo:nth-child({ TargetIndex }) > span",".sc-hPCzgT:nth-child(1) span" ]  
+                    _elements=driver.find_elements(By.CSS_SELECTOR, ".sc-hPCzgT:nth-child(1) span")  # 2022/06/22 update
+                    #_elements=driver.find_elements(By.CSS_SELECTOR, ".sc-ibAmJv:nth-child(1) span")
                     if( len(_elements) < 1 ):
                         _doCreateCurrency( driver,True )
                         continue

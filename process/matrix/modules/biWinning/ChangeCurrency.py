@@ -28,9 +28,10 @@ def _ChangeCurrency( Params,driver,TargetIndex ):
         #[".sc-hPCzgT:nth-child(1) span",".sc-dYzljZ:nth-child(1) > span",f".sc-hcevGk:nth-child({ TargetIndex }) > span"]  # 2022/06/09 update
     ]
 
-    #if( Params.bsize == CBSize.LARGE ):
-        #driver.find_element(By.CSS_SELECTOR, _csslist[int(Params.bsize)][3] ).click(
-
+    if( Params.bsize == CBSize.LARGE ):
+        _element=driver.find_element(By.CSS_SELECTOR,_csslist[int(Params.bsize)][3] )
+        time.sleep(const.Sleep)
+        _element.click()
 
     #画面データにアクセス可能になるまで待機する
     try:
@@ -44,23 +45,27 @@ def _ChangeCurrency( Params,driver,TargetIndex ):
 
     # 2022/06/09 update
     if( _element.text != const.TargetCurrency ):
-        if( Params.bsize == CBSize.LARGE ):
-            _e=Exception(f'::ChangeCurrency03 Large failed!! { _element.text }')
-            raise _e
+        pass
+        #if( Params.bsize == CBSize.LARGE ):
+        #    _e=Exception(f'::ChangeCurrency03 Large failed!! { _element.text }')
+        #    raise _e
     else:
-        if( Params.bsize == CBSize.SMALL ):
-            if( _element.text == const.TargetCurrency ):
+        """
+        #if( Params.bsize == CBSize.SMALL ):
+            #if( _element.text == const.TargetCurrency ):
                 log.error( f" ChangeCurrency!! Nochg from {_element.text} to {const.TargetCurrency}") 
                 return
+        """
+        pass
 
     #_now=datetime.datetime.now()
     #print(f"::ChangeCurrency01 success {_now}")
     time.sleep(const.Sleep)         #ここは確定
     _element.click()
 
-    if( Params.bsize == CBSize.LARGE ):
-        #log.error( f" ChangeCurrency!! Large finish!! {datetime.now()} ") 
-        return
+    #if( Params.bsize == CBSize.LARGE ):
+    #    #log.error( f" ChangeCurrency!! Large finish!! {datetime.now()} ") 
+    #    return
 
     #_now=datetime.datetime.now()
     #print(f"::ChangeCurrency01-C success {_now}")
