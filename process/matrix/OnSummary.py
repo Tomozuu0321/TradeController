@@ -4,6 +4,8 @@ from general.utility.logger import MatrixFunction,log,getShortName
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
 from data.TradeInfo import CTrade
 from data.Exceptions import NotLoginException,ProcessContinuedException
+from selenium.common.exceptions import  WebDriverException
+from urllib3.exceptions import MaxRetryError
 
 def TradeSummarySetRequestResult(ownerName):
     def inner_funcTradeS1(func):
@@ -21,14 +23,15 @@ def TradeSummarySetRequestResult(ownerName):
                 #log.critical( f'called {ownerName } in TradeSummarySetRequestResult {datetime.now()}')
                 #log.critical( f'called {ownerName } in TradeSummarySetRequestResult {datetime.now()}')
                 result = func(*args,**kwargs)
+            except MaxRetryError as _me:
+                raise _me
             except NotLoginException as _ne:
                 raise _ne
             except Exception as _e: # origin Exception
-                _ErrText=f'::Error by { ownerName } in TradeSummarySetRequestResult ty:{type(_e)} {_e}'
-                Params.e=_e
+                _ErrText=f'::Error by { getShortName(ownerName) } in TradeSummarySetRequestResult ty:{type(_e)} {_e}'
+                _we=WebDriverException(f' {_ErrText} Reset Request')
                 log.critical( _ErrText )
-                raise _e
-                #pass
+                raise _we
             finally:
                 #購入を記録する
                 _trade=Params.trade.copy()
@@ -52,16 +55,18 @@ def TradeSummarySetTradeResult(ownerName):
                 Params.trade.SummaryFlag=CFlags.FAILED
                 #log.critical( f'called {ownerName } in TradeSummarySetTradeResult {datetime.now()}')
                 result = func(*args,**kwargs)
+            except MaxRetryError as _me:
+                raise _me
             except ProcessContinuedException as _pc:
                 #呼び出し元で処理している為、ここはなにもしなくてよい
                 raise _pc
             except NotLoginException as _ne:
                 raise _ne
             except Exception as _e: # origin Exception
-                _ErrText=f'::Error by { ownerName } in TradeSummarySetTradeResult ty:{type(_e)} {_e}'
-                Params.e=_e
+                _ErrText=f'::Error by { getShortName(ownerName) } in TradeSummarySetTradeResult ty:{type(_e)} {_e}'
+                _we=WebDriverException(f' {_ErrText} Reset Request')
                 log.critical( _ErrText )
-                raise _e
+                raise _we
                 #pass
             finally:
                 #取引結果を記録する
@@ -90,13 +95,15 @@ def TranSummarySetTransaction(ownerName):
                 Params.tran.SummaryFlag=CFlags.FAILED
                 #log.critical( f'called { getShortName(ownerName) } in TranSummarySetTransaction {datetime.now()}')
                 result = func(*args,**kwargs)
+            except MaxRetryError as _me:
+                raise _me
             except NotLoginException as _ne:
                 raise _ne
             except Exception as _e: # origin Exception
                 _ErrText=f'::Error by { getShortName(ownerName) } in TranSummarySetTransaction ty:{type(_e)} {_e}'
-                Params.e=_e
+                _we=WebDriverException(f' {_ErrText} Reset Request')
                 log.critical( _ErrText )
-                raise _e
+                raise _we
                 #pass
             finally:
                 #トランザクションを記録する

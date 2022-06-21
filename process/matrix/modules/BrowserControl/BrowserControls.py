@@ -99,6 +99,7 @@ def __BrOpen(Params,sts,evt):
 
     except ProcessContinuedException:
         Params.trade.Esti==CEsti.PASS
+        #Params.driver =None
         pass
     except WebDriverException as _we:
         if(Params.PlatformName()==BrEmv.PlatformWindows):

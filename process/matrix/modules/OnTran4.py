@@ -35,6 +35,8 @@ def OnTran4(Params,sts,evt):
         Params.action(_Amount[2])
         print(f"  { _Amount[0] } loss {_Amount[1]:0.3f} M: { _Amount[2] } {datetime.now().replace(microsecond = 0)} -------------")
         __PrepareTrading(Params,Params.driver,_Amount[0] )
+    except Exception as e: # origin Exception
+        print( f'::OnTran4 Exception catch!! t:{type(e)} e:{ e }')
     finally:
         Params.trade.Impossible=False
         pass

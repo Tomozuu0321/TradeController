@@ -5,7 +5,7 @@ from general.utility.logger import MatrixFunction,log,getShortName
 from general.utility.StopWatch import MatrixFunctionEx
 from data.Exceptions import DriverDownException,NotLoginException,ProcessContinuedException
 from selenium.common.exceptions import WebDriverException #,NoSuchElementException
-#from urllib3.exceptions import MaxRetryError
+from urllib3.exceptions import MaxRetryError
 
 @MatrixFunction
 def OnAmount(Params,sts,evt):
@@ -188,7 +188,7 @@ def MatrixHandler(owner,Params,evt):
                 finally:
                     pass
                     Params.driver=None
-        
+                    Params.Flags=Bit.Clr(Params.Flags,CFlags.B_OPEN)
         #DriverErrorHandler(Params,we)
         #_e=DriverDownException(f'{__name__} open failed !! e:{ type(we) }')
         #raise _e
@@ -205,6 +205,10 @@ def MatrixHandler(owner,Params,evt):
             pass
         Params.sts(CSts.LOGOUT)
         DriverErrorHandler(Params,de)
+
+    except MaxRetryError as me:
+        log.error( f'{getShortName(__name__)} MaxRetryError catch!!' ) #e:{ me }')
+        DriverErrorHandler(Params,me)
 
     #
     # 以下は潜在的な処理のバグなので、なるたけ取りきる
@@ -242,6 +246,7 @@ def DriverErrorHandler(Params,e):
     from data.enum import CFlags
     import general.utility.bit as Bit
     Params.Flags=Bit.Set(Params.Flags,CFlags.B_DOWN)
+    Params.Flags=Bit.Clr(Params.Flags,CFlags.B_OPEN)
     Params.driver=None
     Params.sts(CSts.LOGOUT)
     log.error(f"::MatrixTable.py ドライバーがダウンしています {type(e)}")

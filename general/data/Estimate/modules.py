@@ -136,6 +136,21 @@ class CEstimate( pd.DataFrame ):
         #std33={round(table[_c.item0][3.3],wc.Dig)} std32={round(table[_c.item0][3.3],wc.Dig)} "
         #3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
 
+        #Ver1.0 100 % 反対になる値から除外していく
+        """
+        if( _diffF353230 >= -144.76 ):      #-144.76 35->4.0の間で0.1piとなった最低値
+            if( _diffF353230 <= 134.89 ):   # 134.89 35->4.0の間で0.1piとなった最高値
+                _Esti=CEsti.Sell
+                _text=f"2S 順張りの売り {_info}"
+            else;                           # ここには上昇の100%ｶﾞ含まれている
+            
+            
+        
+        else:
+            _Esti=CEsti.Sell
+            _text=f"1S 逆張りの売り {_info}"
+        """
+
         #if( _Dev30 >= 0.0 ):          # 偏差値ｶﾞ0より上は買い =>やめ
         #if( t.diffM3533 > 0.09 ):     # 平均が上昇している場合は買い　負けが込む場合平均とるかも　t.diffM3533 mean 0.60 
         if( _diffF353230 > 2.4 ):      # Reqエリア外

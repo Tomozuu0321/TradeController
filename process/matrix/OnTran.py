@@ -1,6 +1,7 @@
 from datetime import datetime
 import time
 import tornado.ioloop
+from urllib3.exceptions import MaxRetryError
 from data.enum import CEvt,CFlags,CPpsm,CPmd,CFlags
 from data.biWconst import const
 #from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
@@ -13,6 +14,7 @@ from data.Exceptions import NotLoginException,ProcessContinuedException
 from process.matrix.modules.biWinning.GetResult import GetResult
 from process.matrix.modules.BrowserControl.BrowserControls import PageRefresh
 from process.matrix.OnSummary import TradeSummarySetTradeResult,TranSummarySetTransaction
+
 
 @TranSummarySetTransaction("OnTran1")   #トランザクションを記録する
 @TradeSummarySetTradeResult("OnTran1")  #トレード結果を記録する
@@ -67,20 +69,21 @@ def OnTran2(Params,sts,evt):
             print(f"::OnTran4は起動中の為 スキップします" )
             return
 
-        #画面サイズを取得する
-        Params.bsize=bs.Get_bsize(Params,const.Min)
-        #print(f"1 {datetime.datetime.now()}")
-        if( Params.PlatformName() =='Android' ):
-            PageRefresh(Params.driver)
-
-        Params.driver.get( const.Tranding )              # 通常２秒ほどかかる
-        #time.sleep(const.Sleep)                         #これは必要なんだろうか
-        Params.driver.switch_to.frame(0)
-
-        # 購入結果取得
         try:
+            #画面サイズを取得する
+            Params.bsize=bs.Get_bsize(Params,const.Min)
+            #print(f"1 {datetime.datetime.now()}")
+            if( Params.PlatformName() =='Android' ):
+                PageRefresh(Params.driver)
+
+            Params.driver.get( const.Tranding )              # 通常２秒ほどかかる
+            #time.sleep(const.Sleep)                         #これは必要なんだろうか
+            Params.driver.switch_to.frame(0)
+
+            # 購入結果取得
             _value=GetResult(Params.driver,Params.bsize,True)   #投資額チェックする
             Params.Flags=Bit.Clr(Params.Flags,CFlags.B_AMERR)
+
         except ProcessContinuedException as _pc:
             #二回以上は何度読んでも無駄なのでリセット
             if(Bit.Chk(Params.Flags,CFlags.B_AMERR)):
@@ -93,6 +96,8 @@ def OnTran2(Params,sts,evt):
             else:
                 Params.Flags=Bit.Set(Params.Flags,CFlags.B_AMERR)
                 raise _pc
+        except MaxRetryError as _me:
+            raise _me
         except NotLoginException as _ne:
             raise _ne
         except Exception as e: # origin Exception

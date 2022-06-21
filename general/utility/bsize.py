@@ -12,5 +12,7 @@ def Get_bsize( Params,minimum):
             return(CBSize.LARGE)
         else:
             return(CBSize.SMALL)
-    except MaxRetryError as me:
-        _e= DriverDownException(f'{__name__} open failed !! e:{ me }')
+    except AttributeError :
+        raise MaxRetryError('Get_bsize AttributeError Reset Request')
+    except MaxRetryError as mettributeError :
+        raise MaxRetryError('Get_bsize MaxRetryError Reset Request')

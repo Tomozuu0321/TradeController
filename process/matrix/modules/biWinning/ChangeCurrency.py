@@ -22,17 +22,17 @@ from general.utility.StopWatch import StopWatch
 def _ChangeCurrency( Params,driver,TargetIndex ):
 
     _csslist=[
-        [".sc-eWvPJL > span",".sc-dwcuIR:nth-child(1) > span",f".sc-iIEYCM:nth-child({ TargetIndex }) > span"], # 2022/05/14 update
-        #.sc-hPCzgT:nth-child(1) span"
-        [".sc-hPCzgT:nth-child(1) span",".sc-dYzljZ:nth-child(1) > span",f".sc-hcevGk:nth-child({ TargetIndex }) > span"]  # 2022/06/09 update
+        [".sc-eWvPJL > span",".sc-dwcuIR:nth-child(1) > span",f".sc-iIEYCM:nth-child({ TargetIndex }) > span","XXXXXXXXXXXXXXXXXXXXXXXXXXX" ],  # 2022/06/22 unfinished
+        [".sc-iitrsy > span",".sc-eUWgFQ:nth-child(1) > span",f".sc-oHXjo:nth-child({ TargetIndex }) > span",".sc-hPCzgT:nth-child(1) span" ]   # 2022/06/22 update
         #[".sc-eWvPJL > span",".sc-dwcuIR:nth-child(1) > span",f".sc-iIEYCM:nth-child({ TargetIndex }) > span"], # 2022/05/14 update
-        #[".sc-ibAmJv:nth-child(1) span",".sc-dYzljZ:nth-child(1) > span",f".sc-hcevGk:nth-child({ TargetIndex }) > span"]  # 2022/05/20 update
-        #[".sc-hlWvWH > span",".sc-dYzljZ:nth-child(1) > span",f".sc-hcevGk:nth-child({ TargetIndex }) > span"]  # 2022/05/14 update
-        #[".sc-gyUeRy > span",".sc-flMoUE:nth-child(1) > span",f".sc-kUbhmq:nth-child({ TargetIndex }) > span"],
-        #[".sc-irOQnY > span",".sc-kBPbqO:nth-child(1) > span",f".sc-iitrsy:nth-child({ TargetIndex }) > span"]
+        #[".sc-hPCzgT:nth-child(1) span",".sc-dYzljZ:nth-child(1) > span",f".sc-hcevGk:nth-child({ TargetIndex }) > span"]  # 2022/06/09 update
     ]
 
-#画面データにアクセス可能になるまで待機する
+    #if( Params.bsize == CBSize.LARGE ):
+        #driver.find_element(By.CSS_SELECTOR, _csslist[int(Params.bsize)][3] ).click(
+
+
+    #画面データにアクセス可能になるまで待機する
     try:
         _element = WebDriverWait(driver,6).until(EC.presence_of_element_located((By.CSS_SELECTOR,_csslist[int(Params.bsize)][0] )))
     except Exception as e:
