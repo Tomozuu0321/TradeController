@@ -43,20 +43,10 @@ def _ChangeCurrency( Params,driver,TargetIndex ):
     finally:
         pass
 
-    # 2022/06/09 update
-    if( _element.text != const.TargetCurrency ):
-        pass
-        #if( Params.bsize == CBSize.LARGE ):
-        #    _e=Exception(f'::ChangeCurrency03 Large failed!! { _element.text }')
-        #    raise _e
-    else:
-        """
-        #if( Params.bsize == CBSize.SMALL ):
-            #if( _element.text == const.TargetCurrency ):
-                log.error( f" ChangeCurrency!! Nochg from {_element.text} to {const.TargetCurrency}") 
-                return
-        """
-        pass
+    # 2022/06/22 update
+    if( _element.text == const.TargetCurrency ):
+        #log.error( f" ChangeCurrency!! Nochg from {_element.text} to {const.TargetCurrency}") 
+        return
 
     #_now=datetime.datetime.now()
     #print(f"::ChangeCurrency01 success {_now}")
