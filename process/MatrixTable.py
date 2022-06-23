@@ -5,7 +5,7 @@ from general.utility.logger import MatrixFunction,log,getShortName
 from general.utility.StopWatch import MatrixFunctionEx
 from data.Exceptions import DriverDownException,NotLoginException,ProcessContinuedException
 from selenium.common.exceptions import WebDriverException #,NoSuchElementException
-from urllib3.exceptions import MaxRetryError
+from urllib3.exceptions import MaxRetryError,ProtocolError
 
 @MatrixFunction
 def OnAmount(Params,sts,evt):
@@ -166,6 +166,11 @@ def MatrixHandler(owner,Params,evt):
 
     except ProcessContinuedException:
         log.error( f'{getShortName(__name__)} ProcessContinuedException catch!!' )
+        pass
+
+    except ProtocolError as _pe:
+        log.error( f'{getShortName(__name__)} ProtocolError catch!!' )
+        DriverErrorHandler(Params,_pe)
         pass
 
     except WebDriverException as we:
