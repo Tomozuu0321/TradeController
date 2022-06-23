@@ -15,7 +15,7 @@ class CTrade():
     Esti:CEsti=CEsti.PASS
     #lost:float=0.0
     IsLimitOver:bool=False
-    Result:CEsti=CEsti.PASS
+    Result:int=0
     mode:str=BrEmv.DefAction
     MaxValune:float=const.MaxValune
     table:object=None

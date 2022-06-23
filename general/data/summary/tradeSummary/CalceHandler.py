@@ -122,12 +122,16 @@ def _SetTradeResult(df,Params,Trn):
     #print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     #_text=f" call _SetTradeResult-000 W={'勝ち' if _Flag==CEsti.Win else '負け'} d:={ _diff }  A:={ _Assets } {datetime.now()}"
     _Assets=Trn.Assets
+    _value=AnalysisTransaction( Params )
+    if( _value >= 0.0 ):
+        Trn.Result=1
+    else:
+        Trn.Result=-1
 
     if( Trn.Issimulate ):
         _text=f"::_SetTradeResult-003 シュミレートモードです {datetime.now()}"
         print(f"{_text}")
 
-        _value=AnalysisTransaction( Params )
         _Flag=CEsti.PASS
         if( _value >= 1.0 ):
             if( Trn.Esti==CEsti.Buy or Trn.Esti==CEsti.RBuy ):
@@ -155,9 +159,8 @@ def _SetTradeResult(df,Params,Trn):
         elif ( df.loc[ BrEmv.SummaryIndex0,"Assets"] > _Assets ):
             _Flag=CEsti.Lose
         else:
-            _Flag=CEsti.PASS
+            _Flag=CEsti.Lose
 
-    Trn.Result=_Flag
     #df.loc[ BrEmv.SummaryIndex0 ,"Assets"]=_Assets
 
     if(_Flag==CEsti.PASS):

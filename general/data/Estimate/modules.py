@@ -130,68 +130,35 @@ class CEstimate( pd.DataFrame ):
 
         _info=f"3.0={round(_Dev30,wc.Dig)} 3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
         #_info2=f"{'拡散方向' if _std35 > _std33 else '収縮方向' } df50={round(_diff3530,wc.Dig)} df52={round(_diff3532,wc.Dig)} df53={round(_diff3533,wc.Dig)} sd32={round(_std32,wc.Dig)} sd33={round(_std33,wc.Dig)}  sd35={round(_std35,wc.Dig) }"
-        _info2=f"{'拡散方向' if _std35 > _std33 else '収縮方向' } TR={round(_diffF353230,wc.Dig)} 3230C={round(_diffC3230,wc.Dig)} 3533C={round(t.diffC3533,wc.Dig)} "
+        
         
         # df50={round(_diff3530,wc.Dig)} df52={round(_diff3532,wc.Dig)} df53={round(_diff3533,wc.Dig)} sd32={round(_std32,wc.Dig)} sd33={round(_std33,wc.Dig)}  sd35={round(_std35,wc.Dig) }"
         #std33={round(table[_c.item0][3.3],wc.Dig)} std32={round(table[_c.item0][3.3],wc.Dig)} "
         #3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
 
-        #Ver1.0 100 % 反対になる値から除外していく
-        """
-        if( _diffF353230 >= -144.76 ):      #-144.76 35->4.0の間で0.1piとなった最低値
-            if( _diffF353230 <= 134.89 ):   # 134.89 35->4.0の間で0.1piとなった最高値
-                _Esti=CEsti.Sell
-                _text=f"2S 順張りの売り {_info}"
-            else;                           # ここには上昇の100%ｶﾞ含まれている
-            
-            
-        
-        else:
-            _Esti=CEsti.Sell
-            _text=f"1S 逆張りの売り {_info}"
-        """
-
-        #if( _Dev30 >= 0.0 ):          # 偏差値ｶﾞ0より上は買い =>やめ
-        #if( t.diffM3533 > 0.09 ):     # 平均が上昇している場合は買い　負けが込む場合平均とるかも　t.diffM3533 mean 0.60 
-        if( _diffF353230 > 2.4 ):      # Reqエリア外
-            if( _diffF353230 > 4.7 ):
+        #前回の取引結果により処理を分岐
+        if(t.Result > 0 ):  # 前回 上昇
+            _ted=">=0.77"
+            _tdev=">=0.087"
+            _stdfiff=">=6.2"
+            if(_diffF353230 >= 0.77 and t.Dev35 >= 0.087 ):      # 連勝確率50%以上 #TR dev3.5 +2の平均かつ
                 _Esti=CEsti.Buy
-                _text=f"HB 順張りの買い {_info}"
+                _text=f"HN 順張りの買い {_info}"
             else:
-                if( _Buy >= t.Dev35 ):     # 偏差値ｶﾞ75%範囲なら買い
-                    _Esti=CEsti.Buy
-                    _text=f"HS 順張りの買い {_info}"
-                    #_text=f"順張りの買い 3.0={_Dev30} 3.5 {t.Dev35} std={_std30} 3335={t.diffC3533}"
-                else:
-                    _Esti=CEsti.RSell
-                    _text=f"HS 逆張りの売り {_info}"
-                    #else:
-                    #_Esti=CEsti.PASS
-                    #_text=f"連敗中売り見送り {_info}"
-        #elif( t.diffM3533 < -0.15 ):    #t.diffM3533 > 0.0       # 平均が上昇している場合は買い　負けが込む場合平均とるかも　t.diffM3533 mean -0.66
-        elif( _diffF353230 < -2.4 ):     # Reqエリア外
-            if( _diffF353230 < -4.77 ):
+                _Esti=CEsti.RSell
+                _text=f"HR 逆張りの売り {_info}"
+        else:               # 前回 下落
+            _ted="<=-0.93"
+            _tdev="<=-0.065"
+            _stdfiff=">=6.43"
+            if( _diffF353230 <= -0.93 and t.Dev35 <= -0.065 ):     # 連勝確率50%以上 #TR dev3.5 +2の平均かつ
                 _Esti=CEsti.Sell
-                _text=f"LB 順張りの売り {_info}"
-            else:
-                if( _Sell <= t.Dev35 ):     #偏差値ｶﾞ75%範囲なら売リ
-                    _Esti=CEsti.Sell
-                    _text=f"LS 順張りの売り {_info}"
-                else:
-                    _Esti=CEsti.RBuy
-                    _text=f"LS 逆張りの買い {_info}"
-                    #else:
-                    #_Esti=CEsti.PASS
-                    #_text=f"連敗中買い見\送り {_info}"
-
-        else:  #レンジ
-            if( t.diffM3533 > 0.0 ):
-                _Esti=CEsti.Sell
-                _text=f"RS 逆張りの売り {_info}"
+                _text=f"HN 順張りの売り {_info}"
             else:
                 _Esti=CEsti.RBuy
-                _text=f"RS 逆張りの買い {_info}"
+                _text=f"HN 逆張りの買い {_info}"
 
+        _info2=f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)}{_ted} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35={round(_std35,wc.Dig)}{ _stdfiff} "
         #t.Amount=Params.Amount()
         t.Esti=_Esti
         Params.EstiMsg=[_text,_info2]

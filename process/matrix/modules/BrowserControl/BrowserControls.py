@@ -86,6 +86,7 @@ def __BrOpen(Params,sts,evt):
                 Params.TradeSummary.doDbWrite(Params.Mode())
                 Params.trade.Assets=_value
                 Params.trade.Esti==CEsti.PASS
+                Params.trade.Result=Params.TradeSummary.ExeCont
                 Params.Flags=Bit.Clr(Params.Flags,CFlags.B_AMERR)
 
                 #Params.Amount(const.Amount) #20220617 いらない
