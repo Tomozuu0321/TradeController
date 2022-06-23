@@ -153,12 +153,12 @@ class CEstimate( pd.DataFrame ):
             _stdfiff=">=6.43"
             if( _diffF353230 <= -0.93 and t.Dev35 <= -0.065 ):     # 連勝確率50%以上 #TR dev3.5 +2の平均かつ
                 _Esti=CEsti.Sell
-                _text=f"HN 順張りの売り {_info}"
+                _text=f"LN 順張りの売り {_info}"
             else:
                 _Esti=CEsti.RBuy
-                _text=f"HN 逆張りの買い {_info}"
+                _text=f"LR 逆張りの買い {_info}"
 
-        _info2=f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)}{_ted} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35={round(_std35,wc.Dig)}{ _stdfiff} "
+        _info2=f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)}{_ted} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35 {round(_std35,wc.Dig)}{ _stdfiff} "
         #t.Amount=Params.Amount()
         t.Esti=_Esti
         Params.EstiMsg=[_text,_info2]
