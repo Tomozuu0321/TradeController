@@ -2,7 +2,7 @@ from datetime import datetime
 from data.enum import CFlags
 from general.utility.logger import MatrixFunction,log,getShortName
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
-from data.TradeInfo import CTrade
+#from general.data.TradeInfo import CTrade
 from data.Exceptions import NotLoginException,ProcessContinuedException
 from selenium.common.exceptions import  WebDriverException
 from urllib3.exceptions import MaxRetryError

@@ -1,9 +1,10 @@
 # %%
 import time
-from general.utility.logger import MatrixSupportFunction,log
-from data.biWconst import const
-from data.TradeInfo import CTrade
+
 from data.enum import CBSize
+from data.biWconst import const
+from general.utility.logger import log,MatrixSupportFunction
+from general.data.TradeInfo import CTrade
 import general.utility.bsize as bs
 from data.cookies.CookieHandler import CCookieHandler
 

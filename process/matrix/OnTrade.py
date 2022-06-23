@@ -1,13 +1,13 @@
 #from datetime import datetime,time
 from datetime import datetime
 import time
-from data.TradeInfo import CTrade
 from data.enum import CEvt,CFlags,CPpsm,CEsti,CPmd
 from data.biWconst import const
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
 #from data.Exceptions import DriverDownException,NotLoginException
 from general.utility.logger import MatrixFunction,log
 from general.utility.StopWatch import MatrixFunctionEx
+#from general.data.TradeInfo import CTrade
 from general.data.Estimate.modules import CEstimate
 
 import general.utility.bit as Bit
@@ -82,7 +82,6 @@ def OnTrade4(Params,sts,evt):
     Params.Receive=_data
 
     #購入判定
-    #from data.TradeInfo import CTrade
     CEstimate().getTradeParams( Params,_data )
     #Params.trade.getTradeParams(_estis[0],Params.TradeSummary)
 

@@ -18,8 +18,6 @@ from general.utility.logger import log
 from dataclasses import dataclass
 import datetime
 import pandas
-#from data.Param import CParam
-#from data.TradeInfo import CTrade
 
 @dataclass
 class CTranSummary( pandas.DataFrame ):

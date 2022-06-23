@@ -149,44 +149,4 @@ class CTradeSummary( pandas.DataFrame ):
     def getHtml( self,Digits ):
         return(self._getHtml(Digits))
 
-# %%
-"""
-if __name__ == '__main__':
-
-    from data.Param import CParam
-    from data.TradeInfo import CTrade
-
-#from general.data.database.DbConInformationSystem import CDbConInformationSystem
-#from data.Param import CParam
-    Params=CParam()
-    _Tra=CTrade(True,512)
-
-    print("st")
-
-    _df=CTradeSummary().doDbRead(Params.Mode())
-
-    _df.SetRequestResult(Params,_Tra)
-    _df.SetTradeResult(Params,_Tra)
-
-
-    #_AAAtext=_df.getHtml    #プロパテイは()無しでコール
-    #print( _AAAtext )
-
-    #print(type(_df))
-    #print(f"{_df}")
-    #_df
-
-    #_df.doDbWrite(Params.Mode())
-
-    #_df.doEexcelWrite(Params.Mode())
     
-    #print(type(_df))
-    #print(f"{_df}")
-    #_df
-    #_df
-
-    #print(f"{_df}")
-
-    print("ed")
-
-"""

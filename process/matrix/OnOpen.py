@@ -36,7 +36,7 @@ def OnOpen(Params,sts,evt):
         Params.TranSummary=CTranSummary().doDbRead(Params.Mode())
         #Params.dfs=info.doRead()   # メンテナンス用
 
-        from data.TradeInfo import CTrade
+        from general.data.TradeInfo import CTrade
         Params.trade=CTrade(CFlags.FAILED)
         Params.trade.Assets=const.InvalidValue
         Params.tran=CTrade(CFlags.FAILED)

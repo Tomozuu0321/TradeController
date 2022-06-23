@@ -6,10 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
 # %%
-from general.utility.logger import MatrixSupportFunction,log
-from data.biWconst import const
-from data.TradeInfo import CTrade
 from data.enum import CBSize
+from data.biWconst import const
+from general.utility.logger import MatrixSupportFunction,log
+from general.data.TradeInfo import CTrade
 import general.utility.bsize as bs
 
 @MatrixSupportFunction
