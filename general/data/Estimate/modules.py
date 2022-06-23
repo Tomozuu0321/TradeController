@@ -129,36 +129,31 @@ class CEstimate( pd.DataFrame ):
         _diff3530=_std35-_std30
 
         _info=f"3.0={round(_Dev30,wc.Dig)} 3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
-        #_info2=f"{'拡散方向' if _std35 > _std33 else '収縮方向' } df50={round(_diff3530,wc.Dig)} df52={round(_diff3532,wc.Dig)} df53={round(_diff3533,wc.Dig)} sd32={round(_std32,wc.Dig)} sd33={round(_std33,wc.Dig)}  sd35={round(_std35,wc.Dig) }"
-        
-        
-        # df50={round(_diff3530,wc.Dig)} df52={round(_diff3532,wc.Dig)} df53={round(_diff3533,wc.Dig)} sd32={round(_std32,wc.Dig)} sd33={round(_std33,wc.Dig)}  sd35={round(_std35,wc.Dig) }"
-        #std33={round(table[_c.item0][3.3],wc.Dig)} std32={round(table[_c.item0][3.3],wc.Dig)} "
-        #3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
 
         #前回の取引結果により処理を分岐
+        _diffF353230_r0=_diffF353230.round(0)
         if(t.Result > 0 ):  # 前回 上昇
-            _ted=">=0.77"
+            #_ted=">=0.77"
             _tdev=">=0.087"
             _stdfiff=">=6.2"
-            if(_diffF353230 >= 0.77 and t.Dev35 >= 0.087 ):      # 連勝確率50%以上 #TR dev3.5 +2の平均かつ
+            if( -20.0 <= _diffF353230_r0 and _diffF353230_r0 <= 20.0 ):  # 連勝したデータの集中する範囲を取る
                 _Esti=CEsti.Buy
                 _text=f"HN 順張りの買い {_info}"
             else:
                 _Esti=CEsti.RSell
                 _text=f"HR 逆張りの売り {_info}"
         else:               # 前回 下落
-            _ted="<=-0.93"
+            #_ted="<=-0.93"
             _tdev="<=-0.065"
             _stdfiff=">=6.43"
-            if( _diffF353230 <= -0.93 and t.Dev35 <= -0.065 ):     # 連勝確率50%以上 #TR dev3.5 +2の平均かつ
+            if( -20.0 <= _diffF353230_r0 and _diffF353230_r0 <= 20.0 ):  # 連勝したデータの集中する範囲を取る
                 _Esti=CEsti.Sell
                 _text=f"LN 順張りの売り {_info}"
             else:
                 _Esti=CEsti.RBuy
                 _text=f"LR 逆張りの買い {_info}"
 
-        _info2=f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)}{_ted} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35 {round(_std35,wc.Dig)}{ _stdfiff} "
+        _info2=f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)} TR0 {_diffF353230_r0} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35 {round(_std35,wc.Dig)}{ _stdfiff} "
         #t.Amount=Params.Amount()
         t.Esti=_Esti
         Params.EstiMsg=[_text,_info2]
