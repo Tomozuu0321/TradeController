@@ -116,6 +116,7 @@ def OnTran2(Params,sts,evt):
         __OnTran2(Params,sts,evt)
     except ProcessContinuedException:
         print(f"::__OnTran2 投資額が残っている為 事前処理を行いません" )
+        Params.trade.Impossible=True
         return
 
     #購入準備の実行
