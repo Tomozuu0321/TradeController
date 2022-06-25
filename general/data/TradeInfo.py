@@ -135,7 +135,11 @@ class CTrade():
         self.__lossUpdate( df,Params )
         if df.loc[ BrEmv.SummaryIndex0,"ExeCont"] < 0 :
             simulateValue:int=1
-            _mar= df.isMarPossible(Martingale)
+            if(self.poOp ):
+                _val = divmod(Martingale,100)
+                _mar=_val[1]+1
+            else:
+                _mar= df.isMarPossible(Martingale)
             if(_mar==0):
                 _mode=BrEmv.WaitAction
             _cnt=(df.loc[ BrEmv.SummaryIndex0,"ExeCont"])*-1
@@ -156,7 +160,11 @@ class CTrade():
             self.Issimulate=False
             #２連勝したら前回のロス額を戻す
             _cnt= df.loc[ BrEmv.SummaryIndex0,"ExeCont"]
-            if _cnt > 1 :
+            if(self.poOp ):
+                _ExeMin=0
+            else:
+                _ExeMin=1
+            if _cnt > _ExeMin :
                 _lost=Params.BfLoss()
                 if( _lost < 0.0 ):
                     _Amount=self.__BasicAmount(_baseAmount,_cnt)*-2
