@@ -128,6 +128,8 @@ def OnSummary1(Params,sts,evt):
         _base=Params.Receive[1]
         _ExeCont=Params.Receive[2]
     Params.TradeSummary.doDataClear(_idx,_base,_ExeCont)
+    Params.TradeSummary.doUpdate(Params.Mode())
+
 @MatrixFunction
 def OnSummary2(Params,sts,evt):
     Params.TranSummary.doDataClear(BrEmv.SummaryIndex0)
