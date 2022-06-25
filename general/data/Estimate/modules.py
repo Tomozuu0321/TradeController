@@ -136,22 +136,23 @@ class CEstimate( pd.DataFrame ):
             #_ted=">=0.77"
             _tdev=">=0.087"
             _stdfiff=">=6.2"
+            _Esti=CEsti.RSell
+            _text=f"HR 逆張りの売り {_info}"
             if( -20.0 <= _diffF353230_r0 and _diffF353230_r0 <= 20.0 ):  # 連勝したデータの集中する範囲を取る
-                _Esti=CEsti.Buy
-                _text=f"HN 順張りの買い {_info}"
-            else:
-                _Esti=CEsti.RSell
-                _text=f"HR 逆張りの売り {_info}"
+                if( -13.0 >= _diffF353230_r0 or _diffF353230_r0 >= 7.0 or 0.0 <= _diffF353230 ):
+                    _Esti=CEsti.Buy
+                    _text=f"HN 順張りの買い {_info}"
+
         else:               # 前回 下落
             #_ted="<=-0.93"
             _tdev="<=-0.065"
             _stdfiff=">=6.43"
+            _Esti=CEsti.RBuy
+            _text=f"LR 逆張りの買い {_info}"
             if( -20.0 <= _diffF353230_r0 and _diffF353230_r0 <= 20.0 ):  # 連勝したデータの集中する範囲を取る
-                _Esti=CEsti.Sell
-                _text=f"LN 順張りの売り {_info}"
-            else:
-                _Esti=CEsti.RBuy
-                _text=f"LR 逆張りの買い {_info}"
+                if( -11.15 >= _diffF353230_r0 or _diffF353230_r0 >= 15.0 or 0.0 >= _diffF353230 ):
+                    _Esti=CEsti.Sell
+                    _text=f"LN 順張りの売り {_info}"
 
         _info2=f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)} TR0 {_diffF353230_r0} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35 {round(_std35,wc.Dig)}{ _stdfiff} "
         #t.Amount=Params.Amount()

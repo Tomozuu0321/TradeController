@@ -31,6 +31,7 @@ class CbiWconst:
     lossCutSound:str="jingle03.wav"
     lossUpdateSound=str="chime04.wav"
     Dig:int=3                                  # floatDigit 少数点の表示桁数
+    coefficient:float=1.23                     # ２回目以降のPAYOUTがイーブンになるための倍率
 
 const=CbiWconst()
 #print(" CbiWconst init END")

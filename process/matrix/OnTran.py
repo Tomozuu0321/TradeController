@@ -65,9 +65,11 @@ def OnTran2(Params,sts,evt):
     @TradeSummarySetTradeResult("OnTran2")  #トレード結果を記録する
     def  __OnTran2(Params,sts,evt):
 
+        """
         if( Params.trade.Impossible==True ):
             print(f"::OnTran4は起動中の為 スキップします" )
             return
+        """
 
         try:
             #画面サイズを取得する

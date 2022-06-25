@@ -66,8 +66,7 @@ class CTrade():
             _lost=_AllLoss
             Params.Loss(0.0)
         else:
-            #__lost=(_AllLoss*mar*-1.13) #88% payoutだから
-            _lost=(_AllLoss*-1.15) + _baseAmount #86% payoutだから
+            _lost=(_AllLoss*(const.coefficient*-1)) + _baseAmount #86% payoutだから
             # ロスカット処理
             if( _lost > self.MaxValune ):
                 #ロス額の退避
@@ -146,13 +145,12 @@ class CTrade():
             if( _cnt < _mar ):
                 _loss=self.__getLoss(Params,_cnt)
                 _Amount=_loss+(_baseAmount)
-                #_Amount=((_baseAmount*_cnt)*1.13) + _baseAmount
             else:
                 _Amount=self.__BasicAmount(_baseAmount,_cnt+1)
 
             #シュミレーｔモード判定
             _mar = divmod(Martingale,100)
-            if( _cnt < _mar[0]  or _mar[1] < _cnt  ):
+            if( (_cnt < _mar[0]  or _mar[1] < _cnt ) and 0 < _mar[1] ):
                 self.Issimulate=True
             else:
                 self.Issimulate=False
@@ -207,7 +205,7 @@ class CTrade():
     def PositiveOperation( self,baseAmount,Loss,cnt):
         if( self.poOp and Loss < 0.0 ):
             #積極的運用 かつ　損失額ありの場合
-            _Amount=baseAmount+(baseAmount*1.5)     #1.5倍は適当
+            _Amount=baseAmount+(baseAmount*(const.coefficient+0.25))     #倍率は適当
             pass
         else:
           _Amount=self.__BasicAmount(baseAmount,cnt)
@@ -216,7 +214,7 @@ class CTrade():
     
     def __BasicAmount(self,baseAmount,cnt ):
         if( cnt > 1 ):
-            _Amount=(baseAmount*1.15)   #86% payoutだから
+            _Amount=(baseAmount*const.coefficient)   #88% payoutだから
         else:
             _Amount=baseAmount
         return(_Amount )
