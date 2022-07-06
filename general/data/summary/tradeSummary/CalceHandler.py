@@ -109,10 +109,8 @@ def _SetTradeResult(df,Params,Trn):
             _data=Params.Receive
             _key=_data['MT'][0]["Evt"]  #c
             if( _key== 'TRAN' ):
-                #['中間率20秒(%)', '1080.30', '差分', '21.06', '1272.22', '24.77', '[STCH]', '56.49', '38.05', '18.45', '56.49', '38.05', '予測', '1', '結果', '1', '照合', '0', '']
-                 #df2.loc[4.0]=float(_data['MT'][0][_key][0]["00"][0].split(',')[11])
-                 #df2.loc[4.0]=float(_data['MT'][0][_key][0]["00"][0].split(',')[11])
-                _val=float(_data['MT'][0][_key][0]["03"][0].split(',')[3])
+                L0=_data['MT'][0][_key][0]["00"][0].split(',')
+                _val=float(L0[16])-float(L0[7])
         except Exception:
             pass
         finally:

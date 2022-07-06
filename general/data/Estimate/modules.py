@@ -19,7 +19,10 @@ class CEstimate( pd.DataFrame ):
     @classmethod
     def getTradeParams( cls,Params,_data ):
     #def getTradeParams( self,_esti,df ):
-
+    
+        _Esti=cls.CalcEstimate(None,None,Params )
+        return
+    
         df=Params.TradeSummary
         _key=_data['MT'][0]["Evt"]
 
@@ -99,62 +102,37 @@ class CEstimate( pd.DataFrame ):
         #Params.trade.Amount=_Amount
         #Params.trade.Esti=_Esti
 
-        GraphDraw(table,AannotateList)
+        #GraphDraw(table,AannotateList)
 
     def CalcEstimate(table,AannotateList,Params ):  # t=Params.trade
 
         t=Params.trade
         _Esti=CEsti.PASS
-        t.diffC3533=(table[_c.Target][3.5]-table[_c.Target][3.3]).round(1) 
-        t.diffM3533=(table[_c.item1][3.5]-table[_c.item1][3.3]).round(1)
-        t.std35=table[_c.item0][3.5] #標準偏差
-        t.Dev35=table[_c.item6][3.5] #標準値
-        _std30=table[_c.item0][3.0] #標準偏差
-        _Dev30=table[_c.item6][3.0] #標準値
-        #_Dev35=t.Dev35
-        _diffC3530=(table[_c.Target][3.5]-table[_c.Target][3.0]).round(1)
-        
-        _diffC3230=(table[_c.Target][3.2]-table[_c.Target][3.0]).round(3)
-        _diffF353230=t.diffC3533-_diffC3230
 
-        _Buy =_c.dBuy(_Dev30)
-        _Sell=_c.dSell(_Dev30)
+        #_Buy =_c.dBuy(_Dev30)
+        #_Sell=_c.dSell(_Dev30)
 
-        _std32=table[_c.item0][3.2]
-        _std33=table[_c.item0][3.3]
-        _std35=table[_c.item0][3.5]
+        _df=Params.TranSummary.doDbRead(Params.Mode())
+        _df=_df[( _df["Tid"] == 1 )].head(1)
 
-        _diff3532=_std35-_std32
-        _diff3533=_std35-_std33
-        _diff3530=_std35-_std30
+        _info=""
+        #f"3.0={round(_Dev30,wc.Dig)} 3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
 
-        _info=f"3.0={round(_Dev30,wc.Dig)} 3.5 {round(t.Dev35,wc.Dig)} 3533M={round(t.diffM3533,wc.Dig)} 3530C={round(_diffC3530,wc.Dig)} B {round(_Buy,wc.Dig)} S {round(_Sell,wc.Dig)} std={round(_std30,wc.Dig)}"
+        #_fO0=float(_df["OV"] )
+        #_fC9=float(_df["CV"] )
+        _Result=int(_df["Result"])
 
         #前回の取引結果により処理を分岐
-        _diffF353230_r0=_diffF353230.round(0)
-        if(t.Result > 0 ):  # 前回 上昇
-            #_ted=">=0.77"
-            _tdev=">=0.087"
-            _stdfiff=">=6.2"
-            _Esti=CEsti.RSell
-            _text=f"HR 逆張りの売り {_info}"
-            if( -20.0 <= _diffF353230_r0 and _diffF353230_r0 <= 20.0 ):  # 連勝したデータの集中する範囲を取る
-                if( -13.0 >= _diffF353230_r0 or _diffF353230_r0 >= 7.0 or 0.0 <= _diffF353230 ):
-                    _Esti=CEsti.Buy
-                    _text=f"HN 順張りの買い {_info}"
+        if( _Result > 0  ):     # 前回 上昇
+            _Esti=CEsti.Buy
+            _text=f"HN 順張りの買い {_info}"
+        else:                   # 前回 下落
+            _Esti=CEsti.Sell
+            _text=f"LN 順張りの売り {_info}"
 
-        else:               # 前回 下落
-            #_ted="<=-0.93"
-            _tdev="<=-0.065"
-            _stdfiff=">=6.43"
-            _Esti=CEsti.RBuy
-            _text=f"LR 逆張りの買い {_info}"
-            if( -20.0 <= _diffF353230_r0 and _diffF353230_r0 <= 20.0 ):  # 連勝したデータの集中する範囲を取る
-                if( -11.15 >= _diffF353230_r0 or _diffF353230_r0 >= 15.0 or 0.0 >= _diffF353230 ):
-                    _Esti=CEsti.Sell
-                    _text=f"LN 順張りの売り {_info}"
+        _info2=f"{'前回上昇' if _Result > 0 else '前回下落' }"
+        #f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)} TR0 {_diffF353230_r0} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35 {round(_std35,wc.Dig)}{ _stdfiff} "
 
-        _info2=f"{'前回上昇' if t.Result > 0 else '前回下落' } {'拡散方向' if _std35 > 6.29  else '収縮方向' } TR {round(_diffF353230,wc.Dig)} TR0 {_diffF353230_r0} d3.5 {round(t.Dev35,wc.Dig)}{_tdev} std35 {round(_std35,wc.Dig)}{ _stdfiff} "
         #t.Amount=Params.Amount()
         t.Esti=_Esti
         Params.EstiMsg=[_text,_info2]
