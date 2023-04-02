@@ -2,10 +2,10 @@
 import pickle
 import urllib
 import pandas as pd
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, text
 from data.environment.LivingFieldEnv.Folder import GrFolderDict as fenv
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
+from general.utility.logger import log
 
 # %%
 class CDbConInformationSystem():
@@ -13,7 +13,8 @@ class CDbConInformationSystem():
     __FOLDER__=path=fenv['database']+'/database/'
     __DATA_BASE_PATH__=""
     __TABLENAME__="InfoSys"
-    __db=None
+    __engine=None
+    #__db=None
 
     # コンストラクタの定義
     def __init__(self, mode ):
@@ -23,23 +24,19 @@ class CDbConInformationSystem():
             self.__DATA_BASE_PATH__= self.__FOLDER__+'LivingFieldR.db'
 
     def open(self):
-        app = Flask(__name__)
-        app.config['SQLALCHEMY_DATABASE_URI'] = self.__DATA_BASE_PATH__
-        app.config["SQLALCHEMY_ECHO"] = False #True   # default True
-        #警告メッセージを抑制すろ為,「SQLALCHEMY_TRACK_MODIFICATIONSS」を設定する 追跡機能らしい
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-        self.__db = SQLAlchemy(app)
+        #self.__engine = create_engine(f'sqlite://{file_path}', echo=True)
+        #print(self.__DATA_BASE_PATH__)
+        _echoOn=False   #True
+        self.__engine = create_engine(self.__DATA_BASE_PATH__, echo=_echoOn)
 
     def close(self):
-        self.__db.session.close_all()
+        self.__engine.dispose()
+        #self.__db.session.close_all()
 
     #dbファイル読み込み
     def doRead(self):
-        #query = "SELECT * FROM {0};".format(self._tableName)
         query = "SELECT Name,value FROM {0};".format(self.__TABLENAME__ )
-        _df = pd.read_sql(query, self.__db.engine)
-        #for i in range(0,len(_df.loc[:,"first" ])) :
-        #_df.loc[ i,"first" ]=pd.to_datetime(_df.loc[ i,"first" ])
+        _df = pd.read_sql(sql=text(query), con=self.__engine.connect())
         self.__Deserialize(_df)
         return(_df)
 
@@ -48,10 +45,12 @@ class CDbConInformationSystem():
         try:
             _df=df.copy()
             self.__Serialize(_df)
-            _df.to_sql( self.__TABLENAME__,self.__db.engine,if_exists='replace',index_label='id')
-            self.__db.session.commit()
-        except:
-            self.__db.session.rollback()
+            #print(_df)     
+            _df.to_sql( self.__TABLENAME__, con=self.__engine,if_exists='replace',index_label='id')
+            pass    # commit if successful
+        except Exception as e:
+            log.error(e)
+            pass    # rollback if failed
 
     def __Serialize(self,df):
         for i in range(len(df)):
