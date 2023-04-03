@@ -42,7 +42,7 @@ class CDbConInformationSystem():
         try:
             _df=df.copy()
             self.__Serialize(_df)
-            #print(_df)     
+            #print(_df)
             _df.to_sql( self.__TABLENAME__, con=self.__engine,if_exists='replace',index_label='id')
             pass    # commit if successful
         except Exception as e:
