@@ -14,7 +14,6 @@ class CDbConInformationSystem():
     __DATA_BASE_PATH__=""
     __TABLENAME__="InfoSys"
     __engine=None
-    #__db=None
 
     # コンストラクタの定義
     def __init__(self, mode ):
@@ -24,8 +23,6 @@ class CDbConInformationSystem():
             self.__DATA_BASE_PATH__= self.__FOLDER__+'LivingFieldR.db'
 
     def open(self):
-        #self.__engine = create_engine(f'sqlite://{file_path}', echo=True)
-        #print(self.__DATA_BASE_PATH__)
         _echoOn=False   #True
         self.__engine = create_engine(self.__DATA_BASE_PATH__, echo=_echoOn)
 

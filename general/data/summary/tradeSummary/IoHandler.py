@@ -1,7 +1,8 @@
 import os
 import pandas as pd
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+#from flask import Flask
+#from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, text
 from general.utility.logger import log
 from data.environment.LivingFieldEnv.Folder import GrFolderDict as fenv
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
@@ -12,7 +13,8 @@ class CIoHandler():
     __TABLENAME__="TradeSummary"
     __DATA_BASE_PATH__=""
     __EXCEL_PATH__=""
-    __db=None
+    __engine=None
+    #__db=None
 
     # コンストラクタの定義
     def __init__(self, mode ):
@@ -24,15 +26,19 @@ class CIoHandler():
             self.__EXCEL_PATH__=os.path.join( os.path.join(fenv['data'],'summary'),'TradeSummaryR.xlsx')
 
     def open(self):
+        _echoOn=False   #True
+        self.__engine = create_engine(self.__DATA_BASE_PATH__, echo=_echoOn)
+        """
         app = Flask(__name__)
         app.config['SQLALCHEMY_DATABASE_URI'] = self.__DATA_BASE_PATH__
         app.config["SQLALCHEMY_ECHO"] = False #True   # default True
         #警告メッセージを抑制すろ為,「SQLALCHEMY_TRACK_MODIFICATIONSS」を設定する 追跡機能らしい
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
         self.__db = SQLAlchemy(app)
-
+        """
     def close(self):
-        self.__db.session.close_all()
+        self.__engine.dispose()
+        #self.__db.session.close_all()
 
     #dbファイル読み込み
     def doDbRead(self):
@@ -60,7 +66,8 @@ class CIoHandler():
         query = "SELECT * FROM {0};".format(self.__TABLENAME__ ) #要素が固まってないのでしょうがない
         _df=None
         try:
-            _df = pd.read_sql(query, self.__db.engine)
+            #_df = pd.read_sql(query, self.__db.engine)
+            _df = pd.read_sql(sql=text(query), con=self.__engine.connect())
             _df.drop( columns='id', inplace=True)                # idはいらないので削る
 
             for i in range(0,len(_df.loc[:,"lastUpR" ])) :
@@ -100,13 +107,20 @@ class CIoHandler():
         try:
             #_df=df.copy()
             #self.__Serialize(_df)
-            _df.to_sql( self.__TABLENAME__,self.__db.engine,if_exists='replace',index_label='id')
+            #_df.to_sql( self.__TABLENAME__,self.__db.engine,if_exists='replace',index_label='id')
+            _df.to_sql( self.__TABLENAME__, con=self.__engine,if_exists='replace',index_label='id')
+            pass    # commit if successful
+        except Exception as e:
+            log.error(e)
+            pass    # rollback if failed
+
+            """
             self.__db.session.commit()
             #log.error("sussss")
         except:
             self.__db.session.rollback()
             pass
-
+            """
     #エクセルファイル読み込み
     def __doEexcelRead(self):
         _df=pd.read_excel(self.__EXCEL_PATH__,index_col=0 )
