@@ -3,11 +3,3 @@
 *.csv
 *.db
 *.json
-data/environment/LivingFieldEnv/__pycache__/BrowserEnv.cpython-39.pyc
-general/data/__pycache__/informationSystem.cpython-39.pyc
-general/data/__pycache__/TradeInfo.cpython-39.pyc
-general/data/database/__pycache__/DbConInformationSystem.cpython-39.pyc
-general/data/Estimate/__pycache__/modules.cpython-39.pyc
-process/matrix/__pycache__/OnSummary.cpython-39.pyc
-process/matrix/__pycache__/OnTran.cpython-39.pyc
-process/matrix/modules/BrowserControl/__pycache__/BrowserControls.cpython-39.pyc
