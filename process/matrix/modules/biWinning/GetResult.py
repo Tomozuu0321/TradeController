@@ -113,12 +113,12 @@ def GetResult( driver,bsize,isAmountTest ):
 
         except Exception as e:
             if( i >=(_max-1)):
-                _text=f':GetResult-001 failed!! { datetime.now() }'
+                _text=f'::GetResult-001 failed!! { datetime.now() }'
                 log.error(f'{_text}')
                 _e=Exception(f'{_text } {type(e)}')
                 raise _e
             else:
-                log.error(f':GetResult-001 faileds({i}) retry { datetime.now() } { type(e) }')
+                log.error(f'::GetResult-001 faileds({i}) retry { datetime.now() } { type(e) }')
                 pass
 
     #

@@ -1,6 +1,6 @@
 # %%
 import time
-
+from datetime import datetime
 from data.enum import CBSize
 from data.biWconst import const
 from general.utility.logger import log,MatrixSupportFunction
@@ -57,25 +57,30 @@ def _login(Params,driver):
         ["resources-landing",".btn-square" ],
         ["resources-landing",".btn-square" ]
     ]
-    _elements=driver.find_element_by_class_name(_csslist[1][0]).find_elements(By.CSS_SELECTOR,_csslist[1][1])
+    try:
+        _elements=driver.find_elements(By.CSS_SELECTOR,_csslist[1][1])   # 2023/04/22 update
+        #_elements=driver.find_element_by_class_name(_csslist[1][0]).find_elements(By.CSS_SELECTOR,_csslist[1][1])
+        #self.driver.find_element(By.CSS_SELECTOR, ".btn-square").click()
+        # %%
+        if( len(_elements) ):
+            #print("demo st")
+            #"""
+            #print( f"{__name__} typ:{type(_elements[0])} ")
+            #log.error(f"{__name__} {_elements[0].get_attribute('innerHTML')} get success")
+            ctions = ActionChains(driver)
+            ctions.move_to_element(_elements[0]).perform()
+            ctions.click()
+            ctions.perform()
+            driver.switch_to.alert.accept()
+            #"""
+            #_elements[0].click()
+            #log.critical( f'::__DemoLogin-001 success { datetime.now()}')
+        
+        #クッキーを更新する
+        CCookieHandler().doWrite(Params.driver)
 
-    # %%
-    if( len(_elements) ):
-        #print("demo st")
-        print( f"{__name__} typ:{type(_elements[0])} ")
-        log.error(f"{__name__} {_elements[0].get_attribute('innerHTML')} get suc\cess")
-        ctions = ActionChains(driver)
-        ctions.move_to_element(_elements[0]).perform()
-        ctions.click()
-        ctions.perform()
-        driver.switch_to.alert.accept()
-        #_elements[0].click()
-        print( f"{__name__} demo ed")
-    else:
-        print(f"{__name__} demo err get failed !!" )
+    except Exception as e:
+        _text=f'::__DemoLogin-001 failed!! { datetime.now() } { type(e) }'
+        log.error(f'{_text}')
+        pass
 
-    #クッキーを更新する
-    CCookieHandler().doWrite(Params.driver)
-
-
-    
