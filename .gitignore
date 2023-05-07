@@ -5,3 +5,4 @@
 *.json
 *.pickle
 *.code-workspace
+*.wav
