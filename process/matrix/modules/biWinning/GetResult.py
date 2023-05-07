@@ -51,11 +51,11 @@ def GetResult( driver,bsize,isAmountTest ):
     """
     
     _csslist=[
-        #sc-jMScns
-        [".sc-ezront","XXXXXXXXXXXXXXXXXX"],        # 2022/06/09 update
-        [".sc-jQbIHB","XXXXXXXXXXXXXXXXXX"],        # 2022/06/09 update  idx=1はもう使ってない
-        #[".sc-gJrzqj",".sc-iuGMqu > span"],        # 2022/05/14 update
-        #[".sc-jUEnpm",".sc-jUEnpm > span"],        # 2022/05/14 update
+        #[".sc-iitrsy","XXXXXXXXXXXXXXXXXX"],       # 2023/04/27 update  <div class="sc-iitrsy eGMabU">
+        [".sc-hlWvWH","XXXXXXXXXXXXXXXXXX"],        # 2023/04/27 update  #<section class="sc-hlWvWH cfnZKp">
+        [".sc-jQbIHB","XXXXXXXXXXXXXXXXXX"],        # 2023/04/27 update
+        #[".sc-ezront","XXXXXXXXXXXXXXXXXX"],       # 2022/06/09 update
+        #[".sc-jQbIHB","XXXXXXXXXXXXXXXXXX"],       # 2022/06/09 update  idx=1はもう使ってない
     ]
 
     #残額が表示されていない場合　ログインしてないので以降の処理をスキップする

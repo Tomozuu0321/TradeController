@@ -34,5 +34,6 @@ class CSoundHandler():
     def _PlaySound(File_PATH):
         #print(f"::CSoundHandler 音をならします2 F:{File_PATH} {datetime.now()} !!!!!! ")
         if(os.path.isfile(File_PATH)):
-            winsound.PlaySound(File_PATH, winsound.SND_FILENAME)
-
+            #音がうるさいので一旦中断
+            #winsound.PlaySound(File_PATH, winsound.SND_FILENAME)
+            pass

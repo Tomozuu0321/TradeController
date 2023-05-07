@@ -1,8 +1,9 @@
 from urllib3.exceptions import MaxRetryError
 from data.enum import CFlags
+from data.biWconst import const
+from data.Exceptions import DriverDownException #,NotLoginException
 from process.matrix.modules.BrowserControl.Header import webdriver,options
 from general.utility.logger import MatrixSupportFunction,log
-from data.Exceptions import DriverDownException #,NotLoginException
 import general.utility.bit as Bit
 from general.utility.StopWatch import StopWatchEx
 
@@ -22,6 +23,7 @@ def _Open(Params):
                     options=options)
 
         driver.set_window_position(0, 0)
+        driver.set_window_size(const.width,const.Height)
         #driver.set_window_position(100,100)
         #driver.set_window_size(500, 800)
         #driver.set_window_size(1500, 1020)

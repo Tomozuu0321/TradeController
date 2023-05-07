@@ -11,10 +11,14 @@ class CbiWconst:
     Top:str="/#"
     Tranding:str=Home+"/trading#/"
     Min:int=1010            # 大画面　小画面のしきい値
+    #Height:int=900         # 画面高さ
+    Height:int=1050         # 画面高さ
+    width:int=500           # 画面幅
+    #width:int=1100         # 画面幅
     Amount:int=500          # 投資額ベース
     TargetCurrency:str="ビットコイン"
     #TargetCurrency:str="Ethereum"
-    CurrencyIndex:int=1     # あやしまれるかもしれんのでイーサ
+    CurrencyIndex:int=1      # ビットコイン
     #CurrencyIndex:int=2     # あやしまれるかもしれんのでイーサ
     lossCutBase:float=10.0
     Sleep:int=1

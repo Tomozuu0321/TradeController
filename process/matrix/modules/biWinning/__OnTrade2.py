@@ -44,11 +44,12 @@ def __OnTrade(Params,driver,Tra ):
         print(f"tra Cancel {_now}")
         return
 
+    print(f"tra gogo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {_now}")
+
     _csslist=[
-        #".sc-iJmhdZ > .dp__caption").click()
-        #".sc-fSnZzA > .dp__caption").click()
-        [".sc-gfHAkt > .dp__caption",".sc-hcevGk > .dp__caption",".sc-kNPvCX",".sc-cqtpGg"],    # 2022/06/09 update 未対応
-        [".sc-iJmhdZ > .dp__caption",".sc-fSnZzA > .dp__caption",".sc-kMOkjD","xxxxxxxx"],   # 2022/06/09 update
+        [".sc-hLGeHF > .dp__caption",".sc-cRcunm > .dp__caption",".sc-hWRnYy","xxxxxxxx"],      # 2022/04/28 update
+        [".sc-dpQcLm > .dp__caption",".sc-kMOkjD > .dp__caption",".sc-icwmWt","xxxxxxxx"],      # 2023/04/28 update
+        #[".sc-iJmhdZ > .dp__caption",".sc-fSnZzA > .dp__caption",".sc-kMOkjD","xxxxxxxx"],     # 2022/06/09 update
         #[".sc-gfHAkt > .dp__caption",".sc-hcevGk > .dp__caption",".sc-kNPvCX",".sc-cqtpGg"],   # 2022/05/14 update
         #[".sc-eTLWQi > .dp__caption",".sc-fcmPfK > .dp__caption",".sc-bQVmPH",".sc-jnHOtz"],   # 2022/05/14 update
     ]
@@ -102,6 +103,12 @@ def __OnTrade(Params,driver,Tra ):
             #print(f"_tra getmsg {_getText} {_msg}")
             Params.trade.SummaryFlags=CFlags.SUCCESS
             log.critical( f"::__OnTrade-001 {_text} ")
+            if( Params.bsize == CBSize.LARGE ):
+                try:
+                    driver.find_element(By.CSS_SELECTOR, "div:nth-child(3) > .sc-edoZmE").click()
+                except Exception as e:
+                    log.error(f'::__OnTrade-002  ポジション画面消込失敗 { datetime.now() } { type(e) }')
+                    pass
 
         elif( const.RejectWord in _getText ):
             _msg=MakeMessage(_getText)
@@ -119,7 +126,8 @@ def __OnTrade(Params,driver,Tra ):
             log.critical(_text)
 
         if( Params.bsize == CBSize.SMALL ):
-            driver.find_element(By.CSS_SELECTOR,_csslist[0][3] ).click()
+            #driver.find_element(By.CSS_SELECTOR,_csslist[0][3] ).click()
+            pass
 
     except TimeoutException as _te:
         _text=f"::__OnTrade-001 タイムアウトにより購入に失敗しました f:0x{Params.Flags:x} {datetime.now()} { type(_te) }"

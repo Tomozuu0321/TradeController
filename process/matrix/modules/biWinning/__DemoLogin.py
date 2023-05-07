@@ -1,10 +1,11 @@
 # %%
 import time
 from datetime import datetime
-from data.enum import CBSize
+#from data.enum import CBSize
 from data.biWconst import const
 from general.utility.logger import log,MatrixSupportFunction
-from general.data.TradeInfo import CTrade
+from general.utility.StopWatch import StopWatchEx
+#from general.data.TradeInfo import CTrade
 import general.utility.bsize as bs
 from data.cookies.CookieHandler import CCookieHandler
 
@@ -19,6 +20,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+
 @MatrixSupportFunction
 def _Nop(Params,driver):
 
@@ -28,6 +30,7 @@ def _Nop(Params,driver):
     #log.info(f'top url~{_url}')
     #Params.driver.get( _url )
 
+@StopWatchEx("__Demologin")
 @MatrixSupportFunction
 def _login(Params,driver):
 

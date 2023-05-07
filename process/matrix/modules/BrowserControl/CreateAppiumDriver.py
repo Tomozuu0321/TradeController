@@ -17,7 +17,7 @@ def _Open(Params):
     caps["deviceName"] = "000000"
     caps["automationName"]="UiAutomator2"
     caps["browserName"] = "Chrome"
-    caps["noReset"]="true"
+    #caps["noReset"]="true"
 
     url=Params.GetUrlEx(0,0,2)
 

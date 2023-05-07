@@ -13,27 +13,43 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
 from process.matrix.modules.biWinning.ChangeCurrency import _ChangeCurrency
 
-def _doCreateCurrency( driver,reload=False ):
+"""
+def _doCreateCurrency( Params,driver,reload=False ):
     #import time
     #from selenium.webdriver.common.by import By
-    if( reload ):
-        #print("reload=======================================================================================================")
-        driver.get(const.Tranding)
+    try:
+        if( reload ):
+            #print("reload=======================================================================================================")
+            driver.get(const.Tranding)
+            time.sleep(1)
+            driver.switch_to.frame(0)
+            time.sleep(1)
+        #else:
+            #print("Not NOT NOT load=======================================================================================================")
+        # 2023/04/25 update
+        driver.find_element(By.CSS_SELECTOR, "svg:nth-child(4) > path").click()
         time.sleep(1)
-        driver.switch_to.frame(0)
+        driver.find_element(By.CSS_SELECTOR, ".sc-koaBLD:nth-child(1) > span").click()
         time.sleep(1)
-    #else:
-        #print("Not NOT NOT load=======================================================================================================")
+        driver.find_element(By.CSS_SELECTOR, ".sc-bKNyAY:nth-child(1) > span:nth-child(2)").click()
 
-    # 2022/05/14 update
-    driver.find_element(By.CSS_SELECTOR, ".sc-dCuYax").click()                              # 2022/05/14 update
-    time.sleep(1)
-    driver.find_element(By.CSS_SELECTOR, ".sc-UwFXA:nth-child(5) > p").click()              # 2022/05/14 update
-    time.sleep(1)
-    driver.find_element(By.CSS_SELECTOR, ".sc-jMlkEa:nth-child(1) .sc-jbiwVq").click()      # 2022/05/14 update
-    #driver.find_element(By.CSS_SELECTOR, ".sc-jacpsN").click()
-    #driver.find_element(By.CSS_SELECTOR, ".sc-fePcYi:nth-child(5) > p").click()
-    #driver.find_element(By.CSS_SELECTOR, ".sc-gmmXTR:nth-child(1) .sc-gmAETw").click()
+        # 2022/05/14 update
+        driver.find_element(By.CSS_SELECTOR, ".sc-dCuYax").click()                              # 2022/05/14 update
+        time.sleep(1)
+        driver.find_element(By.CSS_SELECTOR, ".sc-UwFXA:nth-child(5) > p").click()              # 2022/05/14 update
+        time.sleep(1)
+        driver.find_element(By.CSS_SELECTOR, ".sc-jMlkEa:nth-child(1) .sc-jbiwVq").click()      # 2022/05/14 update
+
+        driver.find_element(By.CSS_SELECTOR, ".sc-jacpsN").click()
+        driver.find_element(By.CSS_SELECTOR, ".sc-fePcYi:nth-child(5) > p").click()
+        driver.find_element(By.CSS_SELECTOR, ".sc-gmmXTR:nth-child(1) .sc-gmAETw").click()
+
+    except Exception as e:
+        _text=f'::_doCreateCurrency-001 failed!! { datetime.now() } { type(e) }'
+        log.error(f'{_text}')
+        raise e
+        pass
+"""
 
 
 #@MatrixSupportFunction
@@ -49,20 +65,14 @@ def __PrepareTrading(Params,driver,Amount ):
             break
         except Exception as e:
             log.error(f'::PrepareTrading-001 failed retry c:{i}{ type(e) }')
+            """
             if( Params.bsize == CBSize.LARGE ):
                 try:
-                    #".sc-ibAmJv:nth-child(1) .asset_icon"
-                    #".sc-ibAmJv:nth-child(1) span"
-                    #_elements=driver.find_elements(By.CSS_SELECTOR, ".sc-ibAmJv:nth-child(1) .asset_icon")
-                    #".sc-iitrsy > span",".sc-eUWgFQ:nth-child(1) > span",f".sc-oHXjo:nth-child({ TargetIndex }) > span",".sc-hPCzgT:nth-child(1) span" ]  
-                    _elements=driver.find_elements(By.CSS_SELECTOR, ".sc-hPCzgT:nth-child(1) span")  # 2022/06/22 update
-                    #_elements=driver.find_elements(By.CSS_SELECTOR, ".sc-ibAmJv:nth-child(1) span")
-                    if( len(_elements) < 1 ):
-                        _doCreateCurrency( driver,True )
-                        continue
+                    _doCreateCurrency( Params,True )
+                    continue
                 except Exception:
                     pass
-
+            """
             _e=NotLoginException(f'::PrepareTrading-001 failed c:{i}{ type(e) }')
             #_e=DriverDownException(f'::PrepareTrading-001 failed c:{i}{ type(e) }')
             time.sleep(const.Sleep)     #これは必要なんだろうか
@@ -85,9 +95,11 @@ def __PrepareTrading(Params,driver,Amount ):
     #time.sleep( 1 )
     #driver.switch_to.frame(0)
 
-    if( Params.bsize == CBSize.SMALL ):
+    #if( Params.bsize == CBSize.SMALL ):
+    if( Params.bsize == CBSize.SMALL ) and ( Params.PlatformName() == BrEmv.PlatformAndroid ):
         isDown=True
         _e=None
+    """
         for i in range(0,5):
             #print( f"cnt {i} {datetime.now()}") 
             try:
@@ -113,7 +125,7 @@ def __PrepareTrading(Params,driver,Amount ):
                 _e=NotLoginException(f':PrepareTrading-003 failed  i:{i} d:{ isDown }')
                 #_e= DriverDownException(f':PrepareTrading-003 failed  i:{i} d:{ isDown }')
             raise _e
-
+    """
     if( _e != None ):
         print( f"::PrepareTrading-003 success {i} {datetime.now()}") 
 

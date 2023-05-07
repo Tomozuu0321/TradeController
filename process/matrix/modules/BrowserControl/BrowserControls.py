@@ -1,7 +1,7 @@
 from datetime import datetime
 from selenium.common.exceptions import InvalidCookieDomainException
 
-from data.enum import CPmd,CEsti,CFlags #,CBSize
+from data.enum import CPmd,CEsti,CFlags,CBSize
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
 from data.Exceptions import DriverDownException,NotLoginException,ProcessContinuedException
 from data.biWconst import const
@@ -76,7 +76,8 @@ def __BrOpen(Params,sts,evt):
         Params.driver.switch_to.frame(0)
 
         from process.matrix.modules.biWinning.GetResult import GetResult
-        from process.matrix.modules.biWinning.__OnTrade1 import _doCreateCurrency
+        from process.matrix.modules.biWinning.ChangeCurrency import _doCreateCurrency
+        #from process.matrix.modules.biWinning.__OnTrade1 import _doCreateCurrency
 
         for i in range(0,2):
             try:
@@ -90,8 +91,9 @@ def __BrOpen(Params,sts,evt):
                 Params.Flags=Bit.Clr(Params.Flags,CFlags.B_AMERR)
 
                 #Params.Amount(const.Amount) #20220617 いらない
+                if( Params.bsize == CBSize.LARGE ):
+                    _doCreateCurrency(Params,False)
 
-                _doCreateCurrency(Params.driver,False)
                 break
 
             except NotLoginException as ne:
