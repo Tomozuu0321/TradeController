@@ -17,12 +17,23 @@ def _Open(Params):
     caps["deviceName"] = "000000"
     caps["automationName"]="UiAutomator2"
     caps["browserName"] = "Chrome"
+    #caps["appPackage"]="com.android.chrome";
+    #caps["appActivity"]="com.google.android.apps.chrome.Main"
+    """"
+    #cap.setCapability("udid", "EQEMCQ4PHISGJFOB");
+    #cap.setCapability("appPackage", "com.android.chrome");
+    #cap.setCapability("appActivity", "com.google.android.apps.chrome.Main");
+    #cap.setCapability("unicodeKeyboard", true);
+    """
+
     #caps["noReset"]="true"
+    #cap.setCapability("fullReset", "false");
+    #caps["fullReset"]="false"
 
     url=Params.GetUrlEx(0,0,2)
 
-    caps["noReset"]="true"
-    options.add_experimental_option("androidKeepAppDataDir",True)
+    #caps["noReset"]="true"
+    #options.add_experimental_option("androidKeepAppDataDir",True)
 
     # appium Serverに接続
     try:
