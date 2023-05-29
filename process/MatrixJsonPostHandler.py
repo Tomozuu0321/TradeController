@@ -3,6 +3,7 @@ import glob
 import pickle
 import urllib
 import json
+import ast
 
 from data.enum import CSts,CEvt
 from data.environment.LivingFieldEnv.Folder import GrFolderDict as fenv
@@ -47,10 +48,27 @@ def MatrixJsonPostHandler(Handle,Process):
    #log.info(self.request.headers.get('Content-Type'))
 
    _isExit=False
-   #if self.request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
-   if self.request.headers.get('Content-Type') == 'application/json':
-      byte=urllib.parse.unquote_to_bytes(json.loads(self.request.body.decode('utf-8')))
-      body=pickle.loads(byte)
+   if self.request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
+   #if self.request.headers.get('Content-Type') == 'application/json':
+      #byte=urllib.parse.unquote_to_bytes(json.loads(self.request.body.decode('utf-8')))
+      #byte=urllib.parse.unquote_to_bytes(self.request.body.decode('utf-8'))
+      #body=pickle.loads(byte)
+      #
+      # 
+      #body=self.request.body.decode('ASCII')
+      body = Handle.get_argument('body')
+      #.decode('utf-8')
+      #body=self.request.body.decode('UTF-16')
+                                    #Shift_JIS')
+      #aaa="aaaa"
+      #aaa.replace
+      #y=body.replace(",']}]}]}","']}]}]}")
+      print(type(body))
+      print(body)
+      body=ast.literal_eval(body)
+      #body2=dict(body)
+      print(type(body))
+      print(body)
       try:
          _key=body['MT'][0]["Evt"]
          _evt=CEvt[ _key ]
