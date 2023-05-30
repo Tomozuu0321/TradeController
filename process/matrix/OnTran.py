@@ -62,7 +62,7 @@ def OnTran6(Params,sts,evt):
 @MatrixFunctionEx
 def OnTran2(Params,sts,evt):
 
-    @TradeSummarySetTradeResult("OnTran2")  #トレード結果を記録する
+    @TradeSummarySetTradeResult("__OnTran2")  #トレード結果を記録する
     def  __OnTran2(Params,sts,evt):
 
         """
@@ -103,7 +103,7 @@ def OnTran2(Params,sts,evt):
         except NotLoginException as _ne:
             raise _ne
         except Exception as e: # origin Exception
-            _e=Exception(f'::Error by OnTran4 {e} ty:{type(e)} {e}')
+            _e=Exception(f'::Error by __OnTran2 {e} ty:{type(e)} {e}')
             raise _e
 
         Params.trade.Assets=_value
@@ -111,7 +111,7 @@ def OnTran2(Params,sts,evt):
         # 集計処理用の情報を設定する
         Params.trade.SummaryFlag=CFlags.SUCCESS
         #CSoundHandler().PlaySound( const.lossUpdateSound )
-        print(f"::OnTran4 GetResult 実行結果 Assets={_value } {datetime.now()} -----------")
+        print(f"::__OnTran2 GetResult 実行結果 Assets={_value } {datetime.now()} -----------")
 
     try:
         #トレード結果集計
@@ -120,6 +120,8 @@ def OnTran2(Params,sts,evt):
         print(f"::__OnTran2 投資額が残っている為 事前処理を行いません" )
         Params.trade.Impossible=True
         return
+    except Exception as e: # origin Exception
+        print(f'::origin Exception Error by OnTran2 {e} ty:{type(e)} {e} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
     #購入準備の実行
     from processor import GrProcess

@@ -1,9 +1,10 @@
 import os
 import glob
-import pickle
+#import pickle
 import urllib
-import json
+#import json
 import ast
+#import chardet
 
 from data.enum import CSts,CEvt
 from data.environment.LivingFieldEnv.Folder import GrFolderDict as fenv
@@ -39,42 +40,24 @@ def OnRequest(Process,Params ):
          os.remove(_file)
    return(_isExit)
 
+"""
+def getEncoding(str):
+   result = chardet.detect(str)
+   return result['encoding']
+"""
 # %%
 def MatrixJsonPostHandler(Handle,Process):
 
    self=Handle
-   #log.info(self.head)
-   #log.info(type(self.head))
-   #log.info(self.request.headers.get('Content-Type'))
-
    _isExit=False
    if self.request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
-   #if self.request.headers.get('Content-Type') == 'application/json':
-      #byte=urllib.parse.unquote_to_bytes(json.loads(self.request.body.decode('utf-8')))
-      #byte=urllib.parse.unquote_to_bytes(self.request.body.decode('utf-8'))
-      #body=pickle.loads(byte)
-      #
-      # 
-      #body=self.request.body.decode('ASCII')
-      body = Handle.get_argument('body')
-      #.decode('utf-8')
-      #body=self.request.body.decode('UTF-16')
-                                    #Shift_JIS')
-      #aaa="aaaa"
-      #aaa.replace
-      #y=body.replace(",']}]}]}","']}]}]}")
-      print(type(body))
-      print(body)
-      body=ast.literal_eval(body)
-      #body2=dict(body)
-      print(type(body))
-      print(body)
+      body=ast.literal_eval(Handle.get_argument('body'))
+      #print(type(body))
       try:
          _key=body['MT'][0]["Evt"]
          _evt=CEvt[ _key ]
          val=body['MT'][0][_key][0]
-         log.info(f"EV={_evt} key={_key} rec={len(val)}")
-         #debug 
+         #log.info(f"EV={_evt} key={_key} rec={len(val)}")
          __Serialize( _key,body )
          _isExit=Process.MatrixJsonPostHandler( Handle,_evt,body )
 

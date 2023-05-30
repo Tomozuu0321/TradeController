@@ -60,7 +60,7 @@ def __PrepareTrading(Params,driver,Amount ):
 
     for i in range(0,3):
         try:
-            _ChangeCurrency( Params,Params.driver,const.CurrencyIndex )
+            _ChangeCurrency( Params,Params.driver,const.ItemTypeIndex,const.CurrencyIndex )
             isDown=False
             break
         except Exception as e:

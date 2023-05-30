@@ -19,11 +19,12 @@ from general.utility.StopWatch import StopWatch
 
 #@MatrixSupportFunction
 #@StopWatch
-def _ChangeCurrency( Params,driver,TargetIndex,create=False ):
+def _ChangeCurrency( Params,driver,TypeIndex,TargetIndex,create=False ):
 
     _csslist=[
-        [".sc-dwcuIR"       ,".sc-eltcbb:nth-child(1) > span",f".sc-aKZfe:nth-child({ TargetIndex }) > span","XXXXXXXXXXXXXXXXXXXXXXXXXXX" ],    # 2023/04/26 unfinished
-        [".sc-hLGeHF > span",".sc-koaBLD:nth-child(1) > span",f".sc-bKNyAY:nth-child({ TargetIndex }) > span:nth-child(2)",".sc-iaEFhd > span" ] # 2023/04/26 update
+        [".sc-dwcuIR"       ,f".sc-eltcbb:nth-child({ TypeIndex }) > span",f".sc-aKZfe:nth-child( { TargetIndex }) > span","XXXXXXXXXXXXXXXXXXXXXXXXXXX" ],   # 2023/05/30 update
+        [".sc-hLGeHF > span",f".sc-koaBLD:nth-child({ TypeIndex }) > span",f".sc-bKNyAY:nth-child({ TargetIndex }) > span:nth-child(2)",".sc-iaEFhd > span" ] # 2023/04/26 update
+        #[".sc-dwcuIR"      ,".sc-eltcbb:nth-child(1) > span"  ,f".sc-aKZfe:nth-child({ TargetIndex }) > span","XXXXXXXXXXXXXXXXXXXXXXXXXXX" ],  # 2023/04/26 unfinished
         #[".sc-eWvPJL > span",".sc-dwcuIR:nth-child(1) > span",f".sc-iIEYCM:nth-child({ TargetIndex }) > span","XXXXXXXXXXXXXXXXXXXXXXXXXXX" ],  # 2022/06/22 unfinished
         #[".sc-iitrsy > span",".sc-eUWgFQ:nth-child(1) > span",f".sc-oHXjo:nth-child({ TargetIndex }) > span",".sc-hPCzgT:nth-child(1) span" ]   # 2022/06/22 update
     ]
@@ -116,7 +117,7 @@ def _doCreateCurrency( Params,reload=False ):
             #print("Not NOT NOT load=======================================================================================================")
             #if( Params.bsize == CBSize.LARGE ):
 
-        _ChangeCurrency( Params,Params.driver,const.CurrencyIndex,True ) # 2023/04/26 update
+        _ChangeCurrency( Params,Params.driver,const.ItemTypeIndex,const.CurrencyIndex,True ) # 2023/05/31 update
 
     except Exception as e:
         _text=f'::_doCreateCurrency-001 failed!! { datetime.now() } { type(e) }'
