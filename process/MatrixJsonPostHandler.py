@@ -10,9 +10,7 @@ from data.enum import CSts,CEvt
 from data.environment.LivingFieldEnv.Folder import GrFolderDict as fenv
 from general.utility.logger import log
 import general.utility.pickler as pp
-#import tornado.ioloop
-#import tornado.web
-#import tornado.ioloop
+#from general.utility.StopWatch import StopWatch
 
 # %%
 #
@@ -46,6 +44,7 @@ def getEncoding(str):
    return result['encoding']
 """
 # %%
+#@StopWatch
 def MatrixJsonPostHandler(Handle,Process):
 
    self=Handle
@@ -60,10 +59,11 @@ def MatrixJsonPostHandler(Handle,Process):
          #log.info(f"EV={_evt} key={_key} rec={len(val)}")
          __Serialize( _key,body )
          _isExit=Process.MatrixJsonPostHandler( Handle,_evt,body )
-
       except KeyError:
          log.error(" Key Error " )
-
+      except Exception as e: # origin Exception
+         log.error(f'::origin Exception Error by MatrixJsonPostHandler {e} ty:{type(e)} {e} ')
+   
    if( _isExit ):
         len_body=0
    else:
@@ -73,7 +73,7 @@ def MatrixJsonPostHandler(Handle,Process):
          len_body=len(body)
          #log.info(body)
          #log.info(type(body))
-
+   #log.error(" MatrixJsonPostHandler END !!!!!" )
    return(len_body)
 
 def __Serialize( key,dic):

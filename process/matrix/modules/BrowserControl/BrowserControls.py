@@ -135,6 +135,8 @@ def BrClose(Params,sts,evt):
             #from data.enum import CFlags
             #import general.utility.bit as Bit
             #Params.Flags=Bit.Clr(Params.Flags,CFlags.B_DOWN)
+    
+    Params.Flags=Bit.Clr(Params.Flags,CFlags.B_OPEN)
 
 @MatrixFunction
 def BrRefresh(Params,sts,evt):
