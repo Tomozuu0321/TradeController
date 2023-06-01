@@ -73,8 +73,8 @@ __TABLE2D__=  [
                                                     # CONNECT
     [[Get,CSts.NOCHG],      [Get,CSts.NOCHG ],      [Get,CSts.NOCHG ]],
     [[Nop,CSts.LOGIN],      [Nop,CSts.CONNECT ],    [Nop,CSts.LOGOUT ]],
-    [[OnTrade1,CSts.NOCHG], [OnTrade2,CSts.CONNECT],[OnTrade3,CSts.LOGIN ]],
-    [[OnTran1,CSts.NOCHG],  [OnTran2,CSts.NOCHG],   [OnTran2,CSts.NOCHG  ]],
+    [[OnTrade1,CSts.NOCHG], [OnTrade2,CSts.NOCHG],  [OnTrade3,CSts.LOGIN ]],
+    [[OnTran1,CSts.NOCHG],  [OnTran2,CSts.CONNECT], [OnTran2,CSts.NOCHG  ]],
     #[[OnTran1,CSts.LOGIN],  [OnTran2,CSts.CONNECT], [OnTran3,CSts.LOGIN ]],
     [[OnTimer1,CSts.NOCHG], [OnTimer1,CSts.NOCHG ], [OnTimer1,CSts.NOCHG ]],
 ]
@@ -90,8 +90,8 @@ __TABLE1D__={
     CEvt.ESTI.name:     [Nop,       CSts.NOCHG],
     CEvt.OTHER.name:    [Nop,       CSts.NOCHG],
     CEvt.TO_A.name:     [OnToA,     CSts.NOCHG],
-    CEvt.TRADE_TH.name: [OnTrade4,  CSts.NOCHG],
-    CEvt.PREP_TH.name:  [OnTran4,   CSts.NOCHG],
+    CEvt.TRADE_TH.name: [OnTrade4,  CSts.LOGIN],
+    CEvt.PREP_TH.name:  [OnTran4,   CSts.LOGIN],
     CEvt.CON_FIN.name:  [ConFin,    CSts.NOCHG],
     CEvt.TO_W.name:     [OnToW,     CSts.NOCHG],
     CEvt.BCLOSE.name:   [BrClose,   CSts.LOGOUT],
@@ -128,7 +128,9 @@ def MatrixHandler(owner,Params,evt):
     _isMatrix=True
     try:
         #Params.Msg=""
-        _sts=Params.sts(); _iSts=int(Params.sts())
+        _sts=Params.sts()
+        #print(type(_sts))
+        _iSts=int(Params.sts())
         if( CSts.MiN >= _sts ) | ( _sts >= CSts.MAX ) :
             _isMatrix=False
         _iEvt=int(evt)
@@ -240,7 +242,8 @@ def MatrixHandler(owner,Params,evt):
         #pass
 
     except TypeError as te:
-        log.error( f'{getShortName(__name__)} TypeError catch!! e:{ te } {te}')
+        log.error( f'{getShortName(__name__)} TypeError catch!! t:{type(te)} e:{ te }')
+        Params.sts(CSts.LOGOUT)
         #Params.sts(CSts.LOGOUT)
         #pass
 
