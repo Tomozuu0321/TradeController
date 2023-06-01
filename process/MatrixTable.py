@@ -1,3 +1,4 @@
+from datetime import datetime
 from data.enum import CSts,CEvt
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
 from data.Sounds.SoundHandler import CSoundHandler
@@ -73,7 +74,7 @@ __TABLE2D__=  [
     [[Get,CSts.NOCHG],      [Get,CSts.NOCHG ],      [Get,CSts.NOCHG ]],
     [[Nop,CSts.LOGIN],      [Nop,CSts.CONNECT ],    [Nop,CSts.LOGOUT ]],
     [[OnTrade1,CSts.NOCHG], [OnTrade2,CSts.CONNECT],[OnTrade3,CSts.LOGIN ]],
-    [[OnTran1,CSts.LOGIN],  [OnTran2,CSts.NOCHG],   [OnTran2,CSts.LOGIN  ]],
+    [[OnTran1,CSts.NOCHG],  [OnTran2,CSts.NOCHG],   [OnTran2,CSts.NOCHG  ]],
     #[[OnTran1,CSts.LOGIN],  [OnTran2,CSts.CONNECT], [OnTran3,CSts.LOGIN ]],
     [[OnTimer1,CSts.NOCHG], [OnTimer1,CSts.NOCHG ], [OnTimer1,CSts.NOCHG ]],
 ]
@@ -87,16 +88,16 @@ __TABLE1D__={
     CEvt.REQU.name:     [OnRequest1,CSts.NOCHG],
     CEvt.STOP.name:     [OnStop,    CSts.NOCHG],
     CEvt.ESTI.name:     [Nop,       CSts.NOCHG],
-    CEvt.OTHER.name:    [Nop,       CSts.LOGOUT],
+    CEvt.OTHER.name:    [Nop,       CSts.NOCHG],
     CEvt.TO_A.name:     [OnToA,     CSts.NOCHG],
-    CEvt.TRADE_TH.name: [OnTrade4,  CSts.LOGIN],
-    CEvt.PREP_TH.name:  [OnTran4,   CSts.LOGIN],
-    CEvt.CON_FIN.name:  [ConFin,    CSts.LOGIN],
+    CEvt.TRADE_TH.name: [OnTrade4,  CSts.NOCHG],
+    CEvt.PREP_TH.name:  [OnTran4,   CSts.NOCHG],
+    CEvt.CON_FIN.name:  [ConFin,    CSts.NOCHG],
     CEvt.TO_W.name:     [OnToW,     CSts.NOCHG],
     CEvt.BCLOSE.name:   [BrClose,   CSts.LOGOUT],
     CEvt.REFRESH.name:  [BrRefresh, CSts.NOCHG],
-    CEvt.BOPEN.name:    [BrOpen,    CSts.LOGIN],
-    CEvt.CLOSE.name:    [OnClose,   CSts.LOGOUT],
+    CEvt.BOPEN.name:    [BrOpen,    CSts.INSIDE],
+    CEvt.CLOSE.name:    [OnClose,   CSts.NOCHG],
     CEvt.OPEN.name:     [OnOpen,    CSts.LOGOUT],
     CEvt.SREQCLR.name:  [OnSummary1,CSts.NOCHG],
     CEvt.STRNCLR.name:  [OnSummary2,CSts.NOCHG],
@@ -136,6 +137,10 @@ def MatrixHandler(owner,Params,evt):
 
         _RetSts=_sts
         _TableSts=CSts.NOCHG
+
+        if( CEvt(evt).name != "TIMER" ):
+            log.critical( f'called MatrixHandler STA evt={CEvt(evt).name} bfs={CSts(_sts).name} afs=XXXXX {datetime.now()}')
+
         if( _isMatrix ):
             #log.debug(type(evt.value))
             #マトリクス処理
@@ -156,7 +161,10 @@ def MatrixHandler(owner,Params,evt):
         # 変数を格納
         Params.sts(__getNextStatus(_TableSts,Params.sts(),_RetSts))
         Params.evt(evt)
-
+    
+        if( CEvt(evt).name != "TIMER" ):
+            log.critical( f'called MatrixHandler END evt={CEvt(evt).name} bfs={CSts(_sts).name} afs={CSts(Params.sts()).name} {datetime.now()}')
+    
     #
     # 以下は通常の運用で発生するもの　基本敵に対処
     #
@@ -175,12 +183,12 @@ def MatrixHandler(owner,Params,evt):
 
     except WebDriverException as we:
         log.error( f'{getShortName(__name__)} WebDriverException catch!! f:0x{Params.Flags:x}' ) #e:{ we }')
+        """"
         Params.sts(CSts.LOGOUT)
         from data.enum import CFlags
         import general.utility.bit as Bit
         _FlagsBk=Params.Flags
         Params.Flags=Bit.Set(Params.Flags,CFlags.B_DOWN)
-
         if( Params.PlatformName() == BrEmv.PlatformWindows ):
             if(Bit.Chk(_FlagsBk,CFlags.B_DOWN)):
                 try:
@@ -194,9 +202,13 @@ def MatrixHandler(owner,Params,evt):
                     pass
                     Params.driver=None
                     Params.Flags=Bit.Clr(Params.Flags,CFlags.B_OPEN)
+            #else:
+                #Params.Flags=Bit.Clr(Params.Flags,CFlags.B_OPEN)
+    
         #DriverErrorHandler(Params,we)
         #_e=DriverDownException(f'{__name__} open failed !! e:{ type(we) }')
         #raise _e
+        """
         pass
 
     except DriverDownException as de:
@@ -224,6 +236,11 @@ def MatrixHandler(owner,Params,evt):
 
     except UnboundLocalError as ue:
         log.error( f'{getShortName(__name__)} UnboundLocalError catch!! e:{ ue }')
+        #Params.sts(CSts.LOGOUT)
+        #pass
+
+    except TypeError as te:
+        log.error( f'{getShortName(__name__)} TypeError catch!! e:{ te } {te}')
         #Params.sts(CSts.LOGOUT)
         #pass
 
