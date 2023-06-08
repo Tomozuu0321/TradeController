@@ -1,4 +1,5 @@
 from general.utility.logger import MatrixFunction,log
+from general.utility.StopWatch import MatrixFunctionEx
 from data.enum import CEvt
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
 
@@ -10,7 +11,8 @@ def OnLogin(Params,sts,evt):
     else:
         OnLoginD(Params,sts,evt)
 
-@MatrixFunction
+#@MatrixFunction
+@MatrixFunctionEx
 def OnLoginD(Params,sts,evt):
     if( evt==CEvt.TO_DEMO ):
         __ModeChange( Params,sts,evt,BrEmv.ModeDemo)

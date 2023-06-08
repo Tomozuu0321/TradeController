@@ -25,11 +25,11 @@ def OnTrade1(Params,sts,evt):
         print(f":取引システムと接続を試みます s:{sts} t:{type(sts)}" )
         from processor import GrProcess
         GrProcess.SetCallBack( CEvt.BOPEN,CPpsm.THREAD )
-        CSoundHandler().PlaySound( const.NoticeSound )
+        #CSoundHandler().PlaySound( const.NoticeSound )
         #GrProcess.SetTradeCallBack( CEvt.BOPEN )
 
 @MatrixFunction
-def OnTrade2(Params,sts,evt):
+def OnTrade4(Params,sts,evt):
 
     #print(f"購入の手続きを開始します s:{sts} t:{type(sts)}" )
     from processor import GrProcess
@@ -48,14 +48,16 @@ def OnTrade3(Params,sts,evt):
 
     print(f":購入リクエストを破棄します s:{sts.name} e:{evt.name}" )
 
-@TradeSummarySetRequestResult("OnTrade4")   #トレードリクエストを記録する
+@TradeSummarySetRequestResult("OnTrade2")   #トレードリクエストを記録する
 @MatrixFunctionEx
-def OnTrade4(Params,sts,evt):
+def OnTrade2(Params,sts,evt):
 
+    """"
     if( evt != CEvt.TRADE_TH ):
         #print("err")
         print(f"OnTrade4 スレッド終了します s:{sts} t:{type(sts)}" )
         return
+    """
 
     #トランザクションの退避
     if( type(Params.Receive) is dict ):
@@ -68,7 +70,7 @@ def OnTrade4(Params,sts,evt):
     for i in range(0,_max):
         if( Params.trade.Impossible ):
             if( i >=(_max-1)):
-                print(f":: OnTrade4 事前処理が完了してない為、購入を中止します {i} {datetime.now()} " )
+                print(f":: OnTrade2 事前処理が完了してない為、購入を中止します {i} {datetime.now()} " )
                 Params.trade.Esti=CEsti.PASS
                 return
         else:

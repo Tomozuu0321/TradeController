@@ -46,8 +46,8 @@ class CProcess():
     def MatrixJsonPostHandler(self,owner,evt,json_data):
         Params.Receive=json_data
         #Params.Msg="call Json Post!! 特にないです"
-        _ret=self.__MatrixHandler(owner,Params,evt)
-        return(_ret)
+        self.SetCallBack(evt,CPpsm.SINGLE )
+        return(False)   # _isExitはFalseに固定
 
     def __MatrixHandler(self,owner,Params,evt):
         _isExit=False

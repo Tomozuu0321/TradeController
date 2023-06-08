@@ -1,7 +1,7 @@
 from datetime import datetime
 from selenium.common.exceptions import InvalidCookieDomainException
 
-from data.enum import CPmd,CEsti,CFlags,CBSize
+from data.enum import CSts,CPmd,CEsti,CFlags,CBSize
 from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
 from data.Exceptions import DriverDownException,NotLoginException,ProcessContinuedException
 from data.biWconst import const
@@ -16,20 +16,22 @@ from selenium.common.exceptions import WebDriverException
 def BrOpen(Params,sts,evt):
 
     #オープン処理が動いている場合スキップ
+    ists=sts
     if(Bit.Chk(Params.Flags,CFlags.B_OPEN)):
         log.error( f" BrOpen Already started ! skip !! {datetime.now()} ") 
         return
     try:
         Params.Flags=Bit.Set(Params.Flags,CFlags.B_OPEN)
-        __BrOpen(Params,sts,evt)
+        ists=__BrOpen(Params,sts,evt)
     finally:
         Params.Flags=Bit.Clr(Params.Flags,CFlags.B_OPEN)
+    return(ists)
 
 def __BrOpen(Params,sts,evt):
 
     _PlatformMode=BrEmv.PlatformMode
     if( _PlatformMode == CPmd.NOSTART ):
-        return
+        return(sts)
 
     #_driver=Params.driver
     if( Params.driver==None ):
@@ -110,6 +112,7 @@ def __BrOpen(Params,sts,evt):
         pass
         #Params.driver=None
 
+    return(CSts.LOGIN)
 
 @MatrixFunction
 def BrClose(Params,sts,evt):

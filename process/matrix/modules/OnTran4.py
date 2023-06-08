@@ -1,7 +1,10 @@
 from datetime import datetime
-from data.enum import CEvt
+from data.enum import CEvt,CFlags;
+from data.Exceptions import DriverDownException,NotLoginException
 from general.utility.StopWatch import MatrixFunctionEx
+from general.utility.logger import log,getShortName
 from process.matrix.modules.biWinning.__OnTrade1 import __PrepareTrading
+import general.utility.bit as Bit
 
 #import time
 #import tornado.ioloop
@@ -20,6 +23,7 @@ from process.matrix.modules.biWinning.__OnTrade1 import __PrepareTrading
 
 @MatrixFunctionEx
 def OnTran4(Params,sts,evt):
+    _sts=sts
     try:
         Params.trade.Impossible=True
 
@@ -30,13 +34,21 @@ def OnTran4(Params,sts,evt):
 
         #次回トレード用の準備
         #CSoundHandler().PlaySound( const.NoticeModeSound )
-        print("OnTran4::購入の事前準備を開始します" )
+        print("OnTran4::購入の事前準備を開始します!!!!!!!!!!!!!!!!!!!!!!!!!!!!" )
         _Amount=Params.trade.getAmount(Params.TradeSummary,Params.Martingale(),Params)
         Params.action(_Amount[2])
         print(f"  { _Amount[0] } loss {_Amount[1]:0.3f} M: { _Amount[2] } {datetime.now().replace(microsecond = 0)} -------------")
         __PrepareTrading(Params,Params.driver,_Amount[0] )
+
+    except AttributeError as ae :
+        log.error( f'::OnTran4 AttributeError catch!! t:{type(ae)} e:{ ae }')
+        Params.Flags=Bit.Clr(Params.Flags,CFlags.B_OPEN)
+        _e=DriverDownException(f':: OnTran4 PrepareTrading-001 failed ')
+        raise _e
     except Exception as e: # origin Exception
-        print( f'::OnTran4 Exception catch!! t:{type(e)} e:{ e }')
+        log.error( f'::OnTran4 Exception catch!!!!!!!!!!! t:{type(e)} e:{ e }')
+
     finally:
         Params.trade.Impossible=False
         pass
+    

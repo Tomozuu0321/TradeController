@@ -140,8 +140,10 @@ def MatrixHandler(owner,Params,evt):
         _RetSts=_sts
         _TableSts=CSts.NOCHG
 
+        """
         if( CEvt(evt).name != "TIMER" ):
             log.critical( f'called MatrixHandler STA evt={CEvt(evt).name} bfs={CSts(_sts).name} afs=XXXXX {datetime.now()}')
+        """
 
         if( _isMatrix ):
             #log.debug(type(evt.value))
@@ -164,9 +166,10 @@ def MatrixHandler(owner,Params,evt):
         Params.sts(__getNextStatus(_TableSts,Params.sts(),_RetSts))
         Params.evt(evt)
     
+        """
         if( CEvt(evt).name != "TIMER" ):
             log.critical( f'called MatrixHandler END evt={CEvt(evt).name} bfs={CSts(_sts).name} afs={CSts(Params.sts()).name} {datetime.now()}')
-    
+        """
     #
     # 以下は通常の運用で発生するもの　基本敵に対処
     #

@@ -20,8 +20,8 @@ class CBrowserEnv:
     DefMode:str=ModeDemo            # ModeReal ModeDemo
     CookieUse:bool=True             #
     RefreshRate:int=4
-    #PageRefresh:int=60
-    PageRefresh:int=0
+    PageRefresh:int=60
+    #PageRefresh:int=0
     Digits:int=2                    # 浮動小数点桁数
     HttpSessionCheck:float=0.005    #
     DRefreshCountForNoteBooK:int=10 #開発用ループカウンター

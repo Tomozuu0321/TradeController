@@ -12,6 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
 from process.matrix.modules.biWinning.ChangeCurrency import _ChangeCurrency
+from process.matrix.modules.biWinning.ChangeTime import _ChangeTime
 
 """
 def _doCreateCurrency( Params,driver,reload=False ):
@@ -211,4 +212,11 @@ def __PrepareTrading(Params,driver,Amount ):
     if( Params.PlatformName() == BrEmv.PlatformAndroid ):
         ele.clear()
 
-    #print( f"::PrepareTrading-005 success {datetime.now()}") 
+    #時間軸を設定する
+    try:
+        _ChangeTime( Params,Params.driver,2 )
+        log.critical(f'::PrepareTrading-006 _ChangeTime _ChangeTime success !!!!')
+    except Exception as e:
+        log.error(f'::PrepareTrading-006 failed!!! { type(e) }')
+
+    #print( f"::PrepareTrading-006 success {datetime.now()}") 

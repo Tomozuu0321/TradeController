@@ -2,6 +2,8 @@ from datetime import datetime
 import time
 import tornado.ioloop
 from urllib3.exceptions import MaxRetryError
+from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import NoSuchWindowException
 from data.enum import CEvt,CFlags,CPpsm,CPmd,CFlags
 from data.biWconst import const
 #from data.environment.LivingFieldEnv.BrowserEnv import BrEmv
@@ -10,11 +12,11 @@ from general.utility.logger import log,MatrixFunction
 from general.utility.StopWatch import MatrixFunctionEx
 import general.utility.bsize as bs
 from data.Sounds.SoundHandler import CSoundHandler
-from data.Exceptions import NotLoginException,ProcessContinuedException
+#from data.Exceptions import NotLoginException,ProcessContinuedException
+from data.Exceptions import DriverDownException,NotLoginException,ProcessContinuedException
 from process.matrix.modules.biWinning.GetResult import GetResult
 from process.matrix.modules.BrowserControl.BrowserControls import PageRefresh
 from process.matrix.OnSummary import TradeSummarySetTradeResult,TranSummarySetTransaction
-
 
 @TranSummarySetTransaction("OnTran1")   #トランザクションを記録する
 @TradeSummarySetTradeResult("OnTran1")  #トレード結果を記録する
@@ -26,7 +28,7 @@ def OnTran1(Params,sts,evt):
         print(f":TRNでも取引システムと接続を試みます s:{sts} t:{type(sts)}" )
         from processor import GrProcess
         GrProcess.SetCallBack( CEvt.BOPEN,CPpsm.THREAD )
-        CSoundHandler().PlaySound( const.NoticeSound )
+        #CSoundHandler().PlaySound( const.NoticeSound )
 
 @TranSummarySetTransaction("OnTran3")   #トランザクションを記録する
 @TradeSummarySetTradeResult("OnTran3")  #トレード結果を記録する
@@ -90,11 +92,8 @@ def OnTran2(Params,sts,evt):
             #二回以上は何度読んでも無駄なのでリセット
             if(Bit.Chk(Params.Flags,CFlags.B_AMERR)):
                 from selenium.common.exceptions import  WebDriverException
-                _we=WebDriverException( "OnTran2 Rwset Request")
-                raise _we
-                #from data.Exceptions import DriverDownException
-                #_de= DriverDownException("OnTran2 Rwset Request")
-                #raise _de
+                _de= DriverDownException("OnTran2 Rwset Request")
+                raise _de
             else:
                 Params.Flags=Bit.Set(Params.Flags,CFlags.B_AMERR)
                 raise _pc
@@ -102,9 +101,15 @@ def OnTran2(Params,sts,evt):
             raise _me
         except NotLoginException as _ne:
             raise _ne
+        except NoSuchWindowException as no:
+            _ErrText=f'::NoSuchWindowException Error by __OnTran2 ty:{type(e)} {e} '
+            _de=DriverDownException(f' {_ErrText} Reset Request')
+            raise _de
         except Exception as e: # origin Exception
-            _e=Exception(f'::Error by __OnTran2 {e} ty:{type(e)} {e}')
-            raise _e
+            print(f'::Error by __OnTran2 ty:{type(e)} {e}')  #
+            #_de= DriverDownException("OnTran2 Rwset Request")
+            #raise _de
+            #raise e
 
         Params.trade.Assets=_value
 
@@ -120,8 +125,14 @@ def OnTran2(Params,sts,evt):
         print(f"::__OnTran2 投資額が残っている為 事前処理を行いません" )
         Params.trade.Impossible=True
         return
+    except NotLoginException as ne:
+        raise ne
+    except DriverDownException as de:
+        raise de
     except Exception as e: # origin Exception
-        print(f'::origin Exception Error by OnTran2 {e} ty:{type(e)} {e} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        _ErrText=f'::origin Exception Error by OnTran2 ty:{type(e)} {e} '
+        #_we=WebDriverException(f' {_ErrText} Reset Request')
+        #pass
 
     #購入準備の実行
     from processor import GrProcess

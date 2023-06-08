@@ -45,7 +45,7 @@ def MakeDataFrame(_data):
 
   _df=pd.DataFrame(
   [
-    [ pd.to_datetime( L0[6])+offsets.Hour(6),0,
+    [ pd.to_datetime( L0[ 6],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),0,
         __comp(L0[16],L0[7]),
         int(L0[6][-2:]),float(L0[7]),
         int(L0[9][-2:]),float(L0[10]),
@@ -55,7 +55,7 @@ def MakeDataFrame(_data):
     ],
 
     #30秒足前半
-    [  pd.to_datetime( L0[6])+offsets.Hour(6),1,
+    [  pd.to_datetime( L0[6],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),1,
         __comp(L3[16],L0[7]),
         int(L0[6][-2:]),float(L0[7]),
         __tcmp(0,L3[9][-2:]),
@@ -67,7 +67,7 @@ def MakeDataFrame(_data):
     ],
 
     #30秒足後半
-    [  pd.to_datetime( L3[15])+offsets.Hour(6),2,
+    [  pd.to_datetime( L3[15],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),2,
         __comp(L0[16],L3[16]),
         int(L0[6][-2:]),float(L3[16]),
         __tcmp(30,L0[9][-2:]),
@@ -81,7 +81,7 @@ def MakeDataFrame(_data):
     ],
 
     #10秒足　19
-    [  pd.to_datetime( L0[6])+offsets.Hour(6),3,
+    [  pd.to_datetime( L0[6],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),3,
         __comp(L1[16],L0[7]),
         int(L0[6][-2:]),float(L0[7]),
         __tcmp(0,L1[9][-2:]),
@@ -92,7 +92,7 @@ def MakeDataFrame(_data):
         int(L1[18][-2:]),float(L1[19]),
     ],
     #10秒足　20
-    [  pd.to_datetime( L1[15])+offsets.Hour(6),4,
+    [  pd.to_datetime( L1[15],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),4,
         __comp(L2[16],L1[7]),
         int(0),float(L1[16]),
         __tcmp(10,L2[9][-2:]),
@@ -103,7 +103,7 @@ def MakeDataFrame(_data):
         int(10),float(L2[19])-float(L1[19]),
     ],
     #10秒足　30
-    [  pd.to_datetime( L2[15])+offsets.Hour(6),5,
+    [  pd.to_datetime( L2[15],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),5,
         __comp(L3[16],L2[7]),
         int(0),float(L2[16]),
         __tcmp(20,L3[9][-2:]),
@@ -114,7 +114,7 @@ def MakeDataFrame(_data):
         int(10),float(L3[19])-float(L2[19]),
     ],
     #10秒足　40
-    [  pd.to_datetime( L3[15])+offsets.Hour(6),6,
+    [  pd.to_datetime( L3[15],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),6,
         __comp(L4[16],L3[7]),
         int(0),float(L3[16]),
         __tcmp(30,L4[9][-2:]),
@@ -125,7 +125,7 @@ def MakeDataFrame(_data):
         int(10),float(L4[19])-float(L3[19]),
     ],
     #10秒足　50
-    [  pd.to_datetime( L4[15])+offsets.Hour(6),7,
+    [  pd.to_datetime( L4[15],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),7,
         __comp(L5[16],L4[7]),
         int(0),float(L4[16]),
         __tcmp(40,L5[9][-2:]),
@@ -136,7 +136,7 @@ def MakeDataFrame(_data):
         int(10),float(L5[19])-float(L4[19]),
     ],
     #10秒足　60
-    [  pd.to_datetime( L5[15])+offsets.Hour(6),8,
+    [  pd.to_datetime( L5[15],format='%Y.%m.%d%H:%M:%S')+offsets.Hour(6),8,
         __comp(L0[16],L5[7]),
         int(0),float(L5[16]),
         __tcmp(50,L0[9][-2:]),
@@ -162,7 +162,7 @@ def _SetTransaction(self,Params,Trade):
       return(-1)
   try:
     _data=Params.Receive
-    #print(f"tyrp={type(_data)}")
+    print(f"tyrp={type(_data)}")
     _df=MakeDataFrame(_data)
     _df.index.name="id"
 

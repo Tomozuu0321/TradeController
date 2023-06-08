@@ -77,7 +77,8 @@ class CParam:
             if(args[0] > 20000.000 or args[0] < -20000.00 ):
                 from data.Sounds.SoundHandler import CSoundHandler
                 from data.biWconst import const
-                CSoundHandler().PlaySound( const.NoticeModeSound )
+                #print(f"CParam::Los over (20000) { args[0] }")
+                #CSoundHandler().PlaySound( const.NoticeModeSound )
 
         return( self.__accessor__(7,0.0,*args))
 

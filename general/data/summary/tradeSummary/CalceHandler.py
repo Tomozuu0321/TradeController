@@ -235,7 +235,10 @@ def __SetTradeResultExeNums(df,_Flags):
         #連続数最大最小の更新
         if( df.loc[ _idx,"ExeContS"] > df.loc[ _idx,"ExeCont"] ):
             df.loc[ _idx,"ExeContS"] = df.loc[ _idx,"ExeCont"]
-            CSoundHandler().PlaySound( const.lossUpdateSound )
+
+            #if( _idx == BrEmv.SummaryIndex0 ):
+                #print(f"\general\data\summary\tradeSummary\CalceHandler.py 238 ExeCount update" )
+                #CSoundHandler().PlaySound( const.lossUpdateSound )
 
         if( df.loc[ _idx,"ExeContB"] < df.loc[ _idx,"ExeCont"] ):
             df.loc[ _idx,"ExeContB"] = df.loc[ _idx,"ExeCont"]

@@ -82,7 +82,8 @@ class CTrade():
                 Params.Loss(_33loss)
                 _lost=_33loss
                 """
-                CSoundHandler().PlaySound( const.NoticeModeSound )
+                #print(f"CTrade::LosCut !!!!!!! ")
+                #CSoundHandler().PlaySound( const.NoticeModeSound )
 
         return(_lost)
 
@@ -119,7 +120,7 @@ class CTrade():
         if( self.mode != newMode ):
             self.mode = newMode
             print(f"====取引モードが変更されました ==> {newMode} ================")
-            CSoundHandler().PlaySound( const.NoticeModeSound )
+            #CSoundHandler().PlaySound( const.NoticeModeSound )
 
     def getAmount( self,df,Martingale,Params ):
 
@@ -184,7 +185,8 @@ class CTrade():
         self.__NoticeMode(_mode)
 
         if( self.IsLimitOver ):
-            CSoundHandler().PlaySound( const.lossCutSound )
+            print(f"CTrade::LimitOver !!!!!!! ")
+            #CSoundHandler().PlaySound( const.lossCutSound )
 
         if( _Amount < 500 ):
             _Amount=_baseAmount

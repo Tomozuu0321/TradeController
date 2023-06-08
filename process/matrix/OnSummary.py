@@ -55,6 +55,9 @@ def TradeSummarySetTradeResult(ownerName):
                 Params.trade.SummaryFlag=CFlags.FAILED
                 #log.critical( f'called {ownerName } in TradeSummarySetTradeResult {datetime.now()}')
                 result = func(*args,**kwargs)
+                #except Exception as _e: # origin Exception
+                #raise _e
+                """
             except MaxRetryError as _me:
                 raise _me
             except ProcessContinuedException as _pc:
@@ -62,12 +65,16 @@ def TradeSummarySetTradeResult(ownerName):
                 raise _pc
             except NotLoginException as _ne:
                 raise _ne
+            except WebDriverException as _we: #これは捨てる
+                log.error( f'process\matrix\OnSummary.py 43::TradeSummarySetTradeResult WebDriverException catch!! e:{ _we }')
+                pass
             except Exception as _e: # origin Exception
                 _ErrText=f'::Error by { getShortName(ownerName) } in TradeSummarySetTradeResult ty:{type(_e)} {_e}'
                 _we=WebDriverException(f' {_ErrText} Reset Request')
                 log.critical( _ErrText )
                 raise _we
                 #pass
+                """
             finally:
                 #取引結果を記録する
                 #log.critical( f'Re2集計 { ownerName } in TradeSummarySetTradeResult {datetime.now()}')
